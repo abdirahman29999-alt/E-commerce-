@@ -1,0 +1,6 @@
+{
+  "name": "DjiAccess - E-Commerce Djibouti",
+  "description": "Plateforme e-commerce professionnelle pour commerçant d'accessoires à Djibouti avec catalogue en FDJ, checkout simplifié, livraison locale et tableau de bord d'administration complet.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
