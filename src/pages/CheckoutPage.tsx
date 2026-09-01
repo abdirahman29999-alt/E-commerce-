@@ -11,12 +11,13 @@ import {
   Phone,
   User,
   FileText,
-  MessageCircle
+  MessageCircle,
+  Send
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { api, formatFDJ } from '../services/api';
 import type { DeliveryZone, PaymentMethod, Order, StoreSettings } from '../types';
-import { generateCartWhatsAppUrl } from '../utils/whatsappHelper';
+import { handleWhatsAppOrderWithPhoto, generateCartWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface CheckoutPageProps {
   deliveryZones: DeliveryZone[];
@@ -472,51 +473,53 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
             {/* Submit Order Button */}
             <div className="space-y-2.5">
               <button
+                id="btn-checkout-whatsapp"
+                type="button"
+                onClick={() =>
+                  handleWhatsAppOrderWithPhoto({
+                    cart,
+                    subtotal,
+                    deliveryFee,
+                    total,
+                    deliveryZone: selectedZone,
+                    settings,
+                    customerInfo: {
+                      name: customerName,
+                      phone: customerPhone,
+                      district: district === 'Autre quartier de Djibouti' && customDistrict ? customDistrict : district,
+                      address,
+                      paymentMethod:
+                        paymentMethod === 'cash_on_delivery'
+                          ? 'Espèces à la livraison'
+                          : paymentMethod === 'd_money'
+                          ? 'D-Money'
+                          : 'Waafi',
+                      notes: deliveryNotes
+                    }
+                  })
+                }
+                className="w-full py-4 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-98 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all text-center cursor-pointer"
+              >
+                <MessageCircle className="w-5 h-5 fill-white/20 shrink-0" />
+                <span>Passer la commande sur WhatsApp</span>
+                <Send className="w-4 h-4 shrink-0 opacity-80" />
+              </button>
+
+              <button
                 id="btn-submit-order"
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 px-4 rounded-full bg-[#5A5A40] hover:bg-[#4A4A30] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all disabled:opacity-50 active:scale-98 cursor-pointer"
+                className="w-full py-3 px-4 rounded-full bg-[#5A5A40] hover:bg-[#4A4A30] text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-xs transition-all disabled:opacity-50 active:scale-98 cursor-pointer"
               >
                 {isSubmitting ? (
                   <span>Enregistrement en cours...</span>
                 ) : (
                   <>
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Confirmer ma commande ({formatFDJ(total)})</span>
+                    <span>Enregistrer la commande sur le site ({formatFDJ(total)})</span>
                   </>
                 )}
               </button>
-
-              <a
-                id="btn-checkout-whatsapp"
-                href={generateCartWhatsAppUrl({
-                  cart,
-                  subtotal,
-                  deliveryFee,
-                  total,
-                  deliveryZone: selectedZone,
-                  settings,
-                  customerInfo: {
-                    name: customerName,
-                    phone: customerPhone,
-                    district: district === 'Autre quartier de Djibouti' && customDistrict ? customDistrict : district,
-                    address,
-                    paymentMethod:
-                      paymentMethod === 'cash_on_delivery'
-                        ? 'Espèces à la livraison'
-                        : paymentMethod === 'd_money'
-                        ? 'D-Money'
-                        : 'Waafi',
-                    notes: deliveryNotes
-                  }
-                })}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-colors text-center cursor-pointer"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Envoyer ma commande sur WhatsApp</span>
-              </a>
             </div>
 
             <p className="text-[11px] text-center text-[#7A766F]">

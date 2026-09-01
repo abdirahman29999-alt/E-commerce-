@@ -11,11 +11,12 @@ import {
   MessageCircle,
   Star,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Send
 } from 'lucide-react';
 import type { Product, Category, StoreSettings } from '../types';
 import { formatFDJ } from '../services/api';
-import { generateProductWhatsAppUrl, getCleanWhatsAppNumber } from '../utils/whatsappHelper';
+import { generateProductWhatsAppUrl, getCleanWhatsAppNumber, handleWhatsAppOrderWithPhoto } from '../utils/whatsappHelper';
 import { useCart } from '../context/CartContext';
 import { ProductCard } from '../components/ProductCard';
 
@@ -298,16 +299,22 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </button>
 
                 {/* Instant WhatsApp Order */}
-                <a
+                <button
                   id="btn-product-whatsapp-order"
-                  href={whatsappOrderUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3.5 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-xs text-center"
+                  type="button"
+                  onClick={() =>
+                    handleWhatsAppOrderWithPhoto({
+                      product,
+                      quantity,
+                      settings
+                    })
+                  }
+                  className="w-full py-3.5 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-98 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-xs text-center cursor-pointer"
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Commander sur WhatsApp</span>
-                </a>
+                  <MessageCircle className="w-4 h-4 fill-white/20" />
+                  <span>Passer la commande sur WhatsApp</span>
+                  <Send className="w-3.5 h-3.5 opacity-80" />
+                </button>
               </div>
             </div>
           ) : (
@@ -339,7 +346,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <ul className="space-y-1 pl-6 list-disc text-[#7A766F]">
               <li>Djibouti-Ville Centre, Héron, Plateau : <strong>2 à 4 heures</strong> (800 FDJ)</li>
               <li>Balbala, Hayabley, Cheik Moussa : <strong>Le jour même</strong> (1 000 FDJ)</li>
-              <li>Retrait gratuit disponible en boutique au Centre-Ville.</li>
+              <li>Haramous, Gabode, PK12 & Nagad : <strong>Livraison express sécurisée</strong></li>
               <li>Paiement à la réception en espèces ou D-Money / Waafi.</li>
             </ul>
           </div>

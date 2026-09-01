@@ -190,15 +190,19 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Contact & Hours */}
+          {/* Service Client & Online Store */}
           <div className="space-y-3">
             <h4 className="text-xs font-semibold text-[#FAF9F6] uppercase tracking-wider">
-              Contact & Magasin
+              Service Client & Commandes
             </h4>
             <ul className="space-y-2.5 text-xs text-[#FAF9F6]/70">
               <li className="flex items-start gap-2">
+                <Truck className="w-4 h-4 text-[#5A5A40] shrink-0 mt-0.5" />
+                <span>Boutique 100% en ligne • Livraison express à domicile & bureau</span>
+              </li>
+              <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#5A5A40] shrink-0 mt-0.5" />
-                <span>{settings?.address || 'Place du 27 Juin, Djibouti-ville'}</span>
+                <span>Djibouti-Ville, Balbala, Héron, Haramous, Gabode & PK12</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#5A5A40] shrink-0" />
@@ -209,10 +213,6 @@ export const Footer: React.FC<FooterProps> = ({
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#5A5A40] shrink-0" />
                 <span>{settings?.email || 'contact@djiaccess.dj'}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Clock className="w-4 h-4 text-[#5A5A40] shrink-0 mt-0.5" />
-                <span>{settings?.openingHours || 'Sam - Jeu : 8h30 - 13h & 16h30 - 22h'}</span>
               </li>
             </ul>
 

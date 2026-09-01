@@ -118,14 +118,6 @@ const defaultDeliveryZones: DeliveryZone[] = [
     estimatedHours: 'Livraison en 24h',
     description: 'Livraison en périphérie de Djibouti-ville.',
     isActive: true
-  },
-  {
-    id: 'zone-retrait',
-    name: 'Retrait Gratuit en Boutique (Place du 27 Juin, Djibouti-ville)',
-    price: 0,
-    estimatedHours: 'Disponible immédiatement',
-    description: 'Venez récupérer votre commande directement au magasin.',
-    isActive: true
   }
 ];
 
@@ -565,11 +557,16 @@ const defaultSettings: StoreSettings = {
   phone: '+253 77 12 34 56',
   whatsapp: '+253 77 12 34 56',
   email: 'contact@djiaccess.dj',
-  address: 'Place du 27 Juin (Place Ménélik), Centre-Ville, Djibouti',
-  openingHours: 'Samedi au Jeudi : 08h30 - 13h00 & 16h30 - 22h00 | Vendredi : 17h00 - 22h00',
+  address: 'Boutique 100% en ligne • Service de Livraison Express à Djibouti-Ville, Balbala, Héron & Environs',
   currency: 'FDJ',
   currencySymbol: 'FDJ',
-  aboutText: 'DjiAccess est la boutique djiboutienne de référence pour vos accessoires smartphones, écouteurs, montres connectées, chargeurs et articles de mode. Livraison express partout à Djibouti et paiement sécurisé à la réception ou via D-Money / Waafi.',
+  primaryColor: '#5A5A40',
+  primaryHoverColor: '#44442F',
+  secondaryColor: '#2D2926',
+  accentColor: '#C5A880',
+  backgroundColor: '#FAF9F6',
+  colorPreset: 'olive',
+  aboutText: 'DjiAccess est la boutique djiboutienne de référence pour vos accessoires smartphones, écouteurs, montres connectées, chargeurs et articles de mode. Boutique 100% en ligne : commandez directement sur le site et recevez votre livraison express partout à Djibouti avec paiement sécurisé à la réception ou via D-Money / Waafi.',
   announcementBar: '🚚 Livraison express en moins de 3h à Djibouti-Ville & Balbala ! Paiement à la livraison accepté.',
   isAnnouncementActive: true,
   announcementTag: 'DJIBOUTI 🇩🇯',
@@ -895,6 +892,9 @@ class DatabaseManager {
   }
 
   private loadDatabase(): DatabaseSchema {
+    const tmpFile = '/tmp/store_db.json';
+
+    // 1. Try reading from primary persistent storage (data/store_db.json)
     try {
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
@@ -916,9 +916,23 @@ class DatabaseManager {
         return parsed;
       }
     } catch (err) {
-      console.error('Error loading database file, initializing defaults', err);
+      console.warn('[DB] Could not read from primary DB_FILE, trying fallback...', err);
     }
 
+    // 2. Try reading from serverless temporary storage (/tmp/store_db.json)
+    try {
+      if (fs.existsSync(tmpFile)) {
+        const raw = fs.readFileSync(tmpFile, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.products && parsed.settings) {
+          return parsed;
+        }
+      }
+    } catch (err) {
+      console.warn('[DB] Fallback tmp file not readable:', err);
+    }
+
+    // 3. Fallback to initial Djibouti default store seed
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync('djibouti2026', salt);
 
@@ -947,10 +961,27 @@ class DatabaseManager {
   }
 
   private saveData(dataToSave: DatabaseSchema = this.data) {
+    this.data = dataToSave;
+    const jsonString = JSON.stringify(dataToSave, null, 2);
+
+    // Try primary location
+    let savedSuccessfully = false;
     try {
-      fs.writeFileSync(DB_FILE, JSON.stringify(dataToSave, null, 2), 'utf-8');
+      if (!fs.existsSync(DB_DIR)) {
+        fs.mkdirSync(DB_DIR, { recursive: true });
+      }
+      fs.writeFileSync(DB_FILE, jsonString, 'utf-8');
+      savedSuccessfully = true;
     } catch (err) {
-      console.error('Failed to persist database file', err);
+      // In serverless environments (like Vercel read-only runtime), write to /tmp
+      try {
+        const tmpFile = '/tmp/store_db.json';
+        fs.writeFileSync(tmpFile, jsonString, 'utf-8');
+        savedSuccessfully = true;
+      } catch (tmpErr) {
+        // In-memory persistence remains intact in this.data
+        console.warn('[DB] Persistence to disk skipped in read-only environment; state is held in-memory.');
+      }
     }
   }
 
@@ -1573,10 +1604,106 @@ class DatabaseManager {
     };
   }
 
+  // ===================== DATABASE EXPORT & IMPORT =====================
+  exportDatabase(): {
+    exportedAt: string;
+    version: string;
+    store: string;
+    data: DatabaseSchema;
+  } {
+    return {
+      exportedAt: new Date().toISOString(),
+      version: '1.0.0',
+      store: this.data.settings?.storeName || 'DjiAccess Djibouti',
+      data: {
+        products: this.data.products || [],
+        categories: this.data.categories || [],
+        deliveryZones: this.data.deliveryZones || [],
+        orders: this.data.orders || [],
+        customers: this.data.customers || [],
+        promotions: this.data.promotions || [],
+        settings: this.data.settings || defaultSettings,
+        users: (this.data.users || []).map((u) => ({
+          id: u.id,
+          username: u.username,
+          email: u.email,
+          name: u.name,
+          role: u.role,
+          passwordHash: u.passwordHash
+        }))
+      }
+    };
+  }
+
+  importDatabase(imported: any): {
+    success: boolean;
+    message: string;
+    counts: {
+      products: number;
+      categories: number;
+      orders: number;
+      customers: number;
+      deliveryZones: number;
+      promotions: number;
+    };
+  } {
+    const payload = imported?.data ? imported.data : imported;
+
+    if (!payload || typeof payload !== 'object') {
+      throw new Error('Format de fichier JSON invalide.');
+    }
+
+    if (!Array.isArray(payload.products) || !Array.isArray(payload.categories)) {
+      throw new Error('Le fichier doit contenir au minimum les listes de produits et de catégories.');
+    }
+
+    // Preserve existing admin user credentials if import lacks users
+    const existingUsers = this.data.users && this.data.users.length > 0 ? this.data.users : [];
+    const importedUsers = Array.isArray(payload.users) && payload.users.length > 0 ? payload.users : existingUsers;
+
+    const newSchema: DatabaseSchema = {
+      products: payload.products,
+      categories: payload.categories,
+      deliveryZones: Array.isArray(payload.deliveryZones) ? payload.deliveryZones : defaultDeliveryZones,
+      orders: Array.isArray(payload.orders) ? payload.orders : [],
+      customers: Array.isArray(payload.customers) ? payload.customers : [],
+      promotions: Array.isArray(payload.promotions) ? payload.promotions : [],
+      settings: payload.settings ? { ...defaultSettings, ...payload.settings } : defaultSettings,
+      users: importedUsers
+    };
+
+    this.saveData(newSchema);
+
+    return {
+      success: true,
+      message: 'Base de données restaurée avec succès.',
+      counts: {
+        products: newSchema.products.length,
+        categories: newSchema.categories.length,
+        orders: newSchema.orders.length,
+        customers: newSchema.customers.length,
+        deliveryZones: newSchema.deliveryZones.length,
+        promotions: newSchema.promotions.length
+      }
+    };
+  }
+
   // Reset / Reseed function for merchant or tests
   resetDatabase() {
     if (fs.existsSync(DB_FILE)) {
-      fs.unlinkSync(DB_FILE);
+      try {
+        fs.unlinkSync(DB_FILE);
+      } catch (err) {
+        console.warn('[DB] Could not delete file directly:', err);
+      }
+    }
+    const tmpFile = '/tmp/store_db.json';
+    if (fs.existsSync(tmpFile)) {
+      try {
+        fs.unlinkSync(tmpFile);
+      } catch (err) {
+        console.warn('[DB] Could not delete tmp file:', err);
+      }
     }
     this.data = this.loadDatabase();
     return true;

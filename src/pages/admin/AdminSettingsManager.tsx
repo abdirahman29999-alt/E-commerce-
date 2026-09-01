@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Save,
   CheckCircle2,
   Phone,
   MessageCircle,
   MapPin,
-  Clock,
   Image as ImageIcon,
   Sparkles,
   LayoutTemplate,
@@ -15,18 +14,28 @@ import {
   Layers,
   ShoppingBag,
   Info,
-  Check
+  Check,
+  Palette,
+  RotateCcw,
+  Database,
+  Download,
+  Upload,
+  RefreshCw,
+  AlertCircle,
+  FileCode,
+  CheckCircle
 } from 'lucide-react';
 import type { StoreSettings } from '../../types';
 import { api, formatFDJ } from '../../services/api';
 import { ImageUploadZone } from '../../components/ImageUploadZone';
+import { THEME_PRESETS } from '../../components/ThemeStyle';
 
 interface AdminSettingsManagerProps {
   settings: StoreSettings | null;
   onRefresh: () => void;
 }
 
-type SectionKey = 'identity' | 'hero' | 'announcement' | 'contact' | 'payments';
+type SectionKey = 'identity' | 'hero' | 'theme' | 'announcement' | 'contact' | 'payments' | 'database';
 
 export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
   settings,
@@ -49,24 +58,39 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
   const [heroCardPrice, setHeroCardPrice] = useState<number>(14000);
   const [heroCardOldPrice, setHeroCardOldPrice] = useState<number>(18500);
 
-  // 3. Bandeau Annonce
+  // 3. Couleurs & Thème du Site
+  const [primaryColor, setPrimaryColor] = useState('#5A5A40');
+  const [primaryHoverColor, setPrimaryHoverColor] = useState('#44442F');
+  const [secondaryColor, setSecondaryColor] = useState('#2D2926');
+  const [accentColor, setAccentColor] = useState('#C5A880');
+  const [backgroundColor, setBackgroundColor] = useState('#FAF9F6');
+  const [colorPreset, setColorPreset] = useState('olive');
+
+  // 4. Bandeau Annonce
   const [announcementBar, setAnnouncementBar] = useState('');
   const [announcementTag, setAnnouncementTag] = useState('DJIBOUTI 🇩🇯');
   const [isAnnouncementActive, setIsAnnouncementActive] = useState(true);
 
-  // 4. Contact & WhatsApp
+  // 5. Contact & WhatsApp
   const [phone, setPhone] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [address, setAddress] = useState('');
-  const [openingHours, setOpeningHours] = useState('');
   const [email, setEmail] = useState('');
 
-  // 5. Moyens de Paiement Locaux
+  // 6. Moyens de Paiement Locaux
   const [enableCashOnDelivery, setEnableCashOnDelivery] = useState(true);
   const [enableDMoney, setEnableDMoney] = useState(true);
   const [enableWaafi, setEnableWaafi] = useState(true);
   const [dMoneyNumber, setDMoneyNumber] = useState('');
   const [waafiNumber, setWaafiNumber] = useState('');
+
+  // 7. Base de Données & Export
+  const [exportingDb, setExportingDb] = useState(false);
+  const [importingDb, setImportingDb] = useState(false);
+  const [resettingDb, setResettingDb] = useState(false);
+  const [dbStats, setDbStats] = useState<any>(null);
+  const [dbNotification, setDbNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -86,14 +110,20 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
       setHeroCardPrice(settings.heroCardPrice || 14000);
       setHeroCardOldPrice(settings.heroCardOldPrice || 18500);
 
+      setPrimaryColor(settings.primaryColor || '#5A5A40');
+      setPrimaryHoverColor(settings.primaryHoverColor || '#44442F');
+      setSecondaryColor(settings.secondaryColor || '#2D2926');
+      setAccentColor(settings.accentColor || '#C5A880');
+      setBackgroundColor(settings.backgroundColor || '#FAF9F6');
+      setColorPreset(settings.colorPreset || 'olive');
+
       setAnnouncementBar(settings.announcementBar || '🚚 Livraison express en moins de 3h à Djibouti-Ville & Balbala ! Paiement à la livraison.');
       setAnnouncementTag(settings.announcementTag || 'DJIBOUTI 🇩🇯');
       setIsAnnouncementActive(settings.isAnnouncementActive ?? true);
 
       setPhone(settings.phone || '+253 77 12 34 56');
       setWhatsapp(settings.whatsapp || '+253 77 12 34 56');
-      setAddress(settings.address || 'Place du 27 Juin (Place Ménélik), Centre-Ville, Djibouti');
-      setOpeningHours(settings.openingHours || 'Samedi au Jeudi : 08h30 - 13h00 & 16h30 - 22h00 | Vendredi : 17h00 - 22h00');
+      setAddress(settings.address || 'Boutique 100% en ligne • Service de Livraison Express à Djibouti-Ville');
       setEmail(settings.email || 'contact@djiaccess.dj');
 
       setEnableCashOnDelivery(settings.enableCashOnDelivery ?? true);
@@ -103,6 +133,102 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
       setWaafiNumber(settings.waafiNumber || '77 12 34 56');
     }
   }, [settings]);
+
+  const loadDbStats = async () => {
+    try {
+      const stats = await api.getDashboardStats();
+      setDbStats(stats);
+    } catch {
+      // Ignore
+    }
+  };
+
+  useEffect(() => {
+    if (activeSection === 'database') {
+      loadDbStats();
+    }
+  }, [activeSection]);
+
+  const handleExportDatabase = async () => {
+    setExportingDb(true);
+    setDbNotification(null);
+    try {
+      const dbBackup = await api.exportDatabase();
+      const blob = new Blob([JSON.stringify(dbBackup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `djiaccess_database_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setDbNotification({
+        type: 'success',
+        message: 'Fichier de base de données JSON téléchargé avec succès !'
+      });
+    } catch (err: any) {
+      setDbNotification({
+        type: 'error',
+        message: err.message || 'Erreur lors du téléchargement de la base de données.'
+      });
+    } finally {
+      setExportingDb(false);
+    }
+  };
+
+  const handleImportFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImportingDb(true);
+    setDbNotification(null);
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      const res = await api.importDatabase(parsed);
+      setDbNotification({
+        type: 'success',
+        message: `Base de données restaurée avec succès (${res.counts.products} produits, ${res.counts.categories} catégories, ${res.counts.orders} commandes, ${res.counts.deliveryZones} zones de livraison).`
+      });
+      onRefresh();
+      loadDbStats();
+    } catch (err: any) {
+      setDbNotification({
+        type: 'error',
+        message: err.message || 'Erreur lors de l\'importation. Vérifiez que le fichier JSON est valide.'
+      });
+    } finally {
+      setImportingDb(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleResetDatabase = async () => {
+    if (!window.confirm('Voulez-vous réinitialiser la base de données avec les données initiales de démonstration de Djibouti ?')) {
+      return;
+    }
+    setResettingDb(true);
+    setDbNotification(null);
+    try {
+      await api.resetDatabase();
+      setDbNotification({
+        type: 'success',
+        message: 'Base de données réinitialisée avec succès aux données d\'origine.'
+      });
+      onRefresh();
+      loadDbStats();
+    } catch (err: any) {
+      setDbNotification({
+        type: 'error',
+        message: err.message || 'Erreur lors de la réinitialisation.'
+      });
+    } finally {
+      setResettingDb(false);
+    }
+  };
 
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -124,6 +250,13 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
         heroCardPrice: Number(heroCardPrice),
         heroCardOldPrice: Number(heroCardOldPrice),
 
+        primaryColor: primaryColor.trim(),
+        primaryHoverColor: primaryHoverColor.trim(),
+        secondaryColor: secondaryColor.trim(),
+        accentColor: accentColor.trim(),
+        backgroundColor: backgroundColor.trim(),
+        colorPreset,
+
         announcementBar: announcementBar.trim(),
         announcementTag: announcementTag.trim(),
         isAnnouncementActive,
@@ -131,7 +264,6 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
         phone: phone.trim(),
         whatsapp: whatsapp.trim(),
         address: address.trim(),
-        openingHours: openingHours.trim(),
         email: email.trim(),
 
         enableCashOnDelivery,
@@ -165,6 +297,12 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
       icon: LayoutTemplate
     },
     {
+      key: 'theme',
+      title: 'Couleurs & Thème',
+      subtitle: 'Couleurs principales, boutons et palettes',
+      icon: Palette
+    },
+    {
       key: 'announcement',
       title: 'Bandeau d’Annonce',
       subtitle: 'Message défilant tout en haut du site',
@@ -173,7 +311,7 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
     {
       key: 'contact',
       title: 'Contact & WhatsApp',
-      subtitle: 'Téléphone, WhatsApp et adresse du magasin',
+      subtitle: 'Téléphone, WhatsApp et zone de service',
       icon: Phone
     },
     {
@@ -181,6 +319,12 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
       title: 'Paiements Djibouti',
       subtitle: 'Espèces, D-Money & Waafi',
       icon: CreditCard
+    },
+    {
+      key: 'database',
+      title: 'Base de Données & Export',
+      subtitle: 'Sauvegarde JSON & Déploiement Vercel',
+      icon: Database
     }
   ];
 
@@ -194,7 +338,7 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
             Personnalisation de la Boutique
           </h1>
           <p className="text-xs sm:text-sm text-[#7A766F] mt-0.5">
-            Interface ultra-simple pour changer vos photos, vos textes et vos coordonnées en un clic.
+            Interface ultra-simple pour changer vos photos, vos textes, vos couleurs et vos coordonnées en un clic.
           </p>
         </div>
 
@@ -222,8 +366,8 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
         </div>
       )}
 
-      {/* Modern 5-Step Simple Tab Selector */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+      {/* Modern 7-Step Simple Tab Selector */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5">
         {sections.map((sec, idx) => {
           const Icon = sec.icon;
           const isActive = activeSection === sec.key;
@@ -232,7 +376,7 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
               key={sec.key}
               type="button"
               onClick={() => setActiveSection(sec.key)}
-              className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer flex flex-col justify-between ${
+              className={`p-3 rounded-2xl text-left transition-all border cursor-pointer flex flex-col justify-between ${
                 isActive
                   ? 'bg-[#2D2926] text-white border-[#2D2926] shadow-sm'
                   : 'bg-white text-[#2D2926] border-[#EAE7E0] hover:border-stone-300'
@@ -448,6 +592,269 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
           </div>
         )}
 
+        {/* ================= 3. COULEURS & THÈME DU SITE ================= */}
+        {activeSection === 'theme' && (
+          <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#EAE7E0] shadow-2xs space-y-6">
+            <div className="border-b border-[#EAE7E0] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 className="text-base font-bold text-[#2D2926] flex items-center gap-2">
+                  <Palette className="w-4 h-4 text-[#5A5A40]" />
+                  3. Couleurs & Style Visuel du Site
+                </h2>
+                <p className="text-xs text-[#7A766F] mt-0.5">
+                  Choisissez une palette prédéfinie ou ajustez les couleurs individuellement (boutons, arrière-plan, accents).
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPrimaryColor('#5A5A40');
+                  setPrimaryHoverColor('#44442F');
+                  setSecondaryColor('#2D2926');
+                  setAccentColor('#C5A880');
+                  setBackgroundColor('#FAF9F6');
+                  setColorPreset('olive');
+                }}
+                className="text-xs font-bold text-[#5A5A40] hover:text-[#2D2926] flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EAE7E0] hover:bg-stone-50 transition-colors self-start sm:self-auto cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Rétablir les couleurs d'origine</span>
+              </button>
+            </div>
+
+            {/* Quick Presets */}
+            <div className="space-y-3">
+              <label className="text-xs font-bold text-[#2D2926] flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Palettes Prêtes à l'Emploi (Cliquez pour appliquer) :</span>
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                {THEME_PRESETS.map((preset) => {
+                  const isSelected = colorPreset === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => {
+                        setColorPreset(preset.id);
+                        setPrimaryColor(preset.primary);
+                        setPrimaryHoverColor(preset.primaryHover);
+                        setSecondaryColor(preset.secondary);
+                        setAccentColor(preset.accent);
+                        setBackgroundColor(preset.bg);
+                      }}
+                      className={`p-3.5 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
+                        isSelected
+                          ? 'border-[#2D2926] ring-2 ring-[#2D2926]/20 bg-stone-50 shadow-xs'
+                          : 'border-[#EAE7E0] hover:border-stone-400 bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-base">{preset.emoji}</span>
+                        <div className="flex items-center gap-1">
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/10 shadow-2xs"
+                            style={{ backgroundColor: preset.primary }}
+                            title="Couleur Principale"
+                          />
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/10 shadow-2xs"
+                            style={{ backgroundColor: preset.accent }}
+                            title="Couleur Accent"
+                          />
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/10 shadow-2xs"
+                            style={{ backgroundColor: preset.bg }}
+                            title="Fond"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-[#2D2926] line-clamp-1">{preset.name}</p>
+                        <p className="text-[10px] text-[#7A766F] mt-0.5 line-clamp-1">{preset.description}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Custom Color Pickers */}
+            <div className="pt-4 border-t border-[#EAE7E0] space-y-4">
+              <h3 className="text-xs font-bold text-[#2D2926] uppercase tracking-wider text-[#7A766F]">
+                Personnalisation Avancée des Couleurs
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {/* 1. Primary Color */}
+                <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#2D2926]">Couleur Principale (Boutons)</label>
+                    <span className="text-[10px] font-mono text-[#7A766F] font-bold">{primaryColor}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={primaryColor}
+                      onChange={(e) => {
+                        setPrimaryColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="w-10 h-10 rounded-xl border border-[#EAE7E0] cursor-pointer p-0.5 bg-white shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={primaryColor}
+                      onChange={(e) => {
+                        setPrimaryColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="flex-1 p-2 text-xs bg-white rounded-xl border border-[#EAE7E0] font-mono font-bold uppercase"
+                    />
+                  </div>
+                  <p className="text-[10px] text-[#7A766F]">Boutons d'action, badges et éléments principaux</p>
+                </div>
+
+                {/* 2. Primary Hover Color */}
+                <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#2D2926]">Survol des Boutons (Hover)</label>
+                    <span className="text-[10px] font-mono text-[#7A766F] font-bold">{primaryHoverColor}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={primaryHoverColor}
+                      onChange={(e) => {
+                        setPrimaryHoverColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="w-10 h-10 rounded-xl border border-[#EAE7E0] cursor-pointer p-0.5 bg-white shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={primaryHoverColor}
+                      onChange={(e) => {
+                        setPrimaryHoverColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="flex-1 p-2 text-xs bg-white rounded-xl border border-[#EAE7E0] font-mono font-bold uppercase"
+                    />
+                  </div>
+                  <p className="text-[10px] text-[#7A766F]">Teinte légèrement plus sombre lors du survol de la souris</p>
+                </div>
+
+                {/* 3. Background Color */}
+                <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#2D2926]">Fond Général du Site</label>
+                    <span className="text-[10px] font-mono text-[#7A766F] font-bold">{backgroundColor}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={backgroundColor}
+                      onChange={(e) => {
+                        setBackgroundColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="w-10 h-10 rounded-xl border border-[#EAE7E0] cursor-pointer p-0.5 bg-white shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={backgroundColor}
+                      onChange={(e) => {
+                        setBackgroundColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="flex-1 p-2 text-xs bg-white rounded-xl border border-[#EAE7E0] font-mono font-bold uppercase"
+                    />
+                  </div>
+                  <p className="text-[10px] text-[#7A766F]">Couleur douce d'arrière-plan de toutes les pages</p>
+                </div>
+
+                {/* 4. Secondary Color */}
+                <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#2D2926]">Couleur des Titres & Textes</label>
+                    <span className="text-[10px] font-mono text-[#7A766F] font-bold">{secondaryColor}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={secondaryColor}
+                      onChange={(e) => {
+                        setSecondaryColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="w-10 h-10 rounded-xl border border-[#EAE7E0] cursor-pointer p-0.5 bg-white shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={secondaryColor}
+                      onChange={(e) => {
+                        setSecondaryColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="flex-1 p-2 text-xs bg-white rounded-xl border border-[#EAE7E0] font-mono font-bold uppercase"
+                    />
+                  </div>
+                  <p className="text-[10px] text-[#7A766F]">Titres principaux et éléments foncés</p>
+                </div>
+
+                {/* 5. Accent Color */}
+                <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#2D2926]">Couleur d'Accentuation</label>
+                    <span className="text-[10px] font-mono text-[#7A766F] font-bold">{accentColor}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={accentColor}
+                      onChange={(e) => {
+                        setAccentColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="w-10 h-10 rounded-xl border border-[#EAE7E0] cursor-pointer p-0.5 bg-white shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={accentColor}
+                      onChange={(e) => {
+                        setAccentColor(e.target.value);
+                        setColorPreset('custom');
+                      }}
+                      className="flex-1 p-2 text-xs bg-white rounded-xl border border-[#EAE7E0] font-mono font-bold uppercase"
+                    />
+                  </div>
+                  <p className="text-[10px] text-[#7A766F]">Détails dorés, sous-lignages et étoiles</p>
+                </div>
+
+                {/* Live Preview Sample */}
+                <div className="p-4 rounded-2xl bg-white border border-[#EAE7E0] flex flex-col justify-between">
+                  <span className="text-xs font-bold text-[#2D2926]">Aperçu du Bouton Client :</span>
+                  <div className="py-2">
+                    <button
+                      type="button"
+                      style={{ backgroundColor: primaryColor }}
+                      className="w-full py-2.5 px-4 rounded-full text-white text-xs font-bold shadow-xs transition-opacity hover:opacity-90"
+                    >
+                      Ajouter au Panier • 4 500 FDJ
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+                    <Check className="w-3 h-3" />
+                    <span>Aperçu instantané appliqué</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ================= 3. BANDEAU D'ANNONCE ================= */}
         {activeSection === 'announcement' && (
           <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#EAE7E0] shadow-2xs space-y-6">
@@ -524,10 +931,10 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
             <div className="border-b border-[#EAE7E0] pb-4">
               <h2 className="text-base font-bold text-[#2D2926] flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#5A5A40]" />
-                4. Vos Coordonnées & Support Client à Djibouti
+                4. Vos Coordonnées & Service Client (Boutique en Ligne)
               </h2>
               <p className="text-xs text-[#7A766F] mt-0.5">
-                Ces numéros permettent aux clients de vous joindre directement par appel ou WhatsApp.
+                Boutique 100% en ligne sans magasin physique : les clients commandent directement sur le site et se font livrer à domicile ou au bureau.
               </p>
             </div>
 
@@ -565,32 +972,21 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
               <div className="space-y-1 sm:col-span-2">
                 <label className="text-xs font-bold text-[#2D2926] flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-rose-600" />
-                  Adresse du Magasin / Point de Retrait
+                  Zone de Couverture & Siège des Livraisons (Djibouti)
                 </label>
                 <input
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Ex: Place du 27 Juin (Place Ménélik), Centre-Ville, Djibouti"
+                  placeholder="Ex: Boutique 100% en ligne • Service de Livraison Express à Djibouti-Ville, Balbala & Héron"
                   className="w-full p-3 text-xs bg-[#FAF9F6] rounded-xl border border-[#EAE7E0] focus:bg-white text-[#2D2926]"
                 />
+                <p className="text-[10px] text-[#7A766F] mt-1">
+                  💡 Note : Pas de retrait en magasin. Toutes les commandes sont expédiées par nos livreurs à domicile.
+                </p>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[#2D2926] flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-amber-600" />
-                  Horaires d'Ouverture
-                </label>
-                <input
-                  type="text"
-                  value={openingHours}
-                  onChange={(e) => setOpeningHours(e.target.value)}
-                  placeholder="Samedi au Jeudi : 08h30 - 22h00"
-                  className="w-full p-3 text-xs bg-[#FAF9F6] rounded-xl border border-[#EAE7E0] focus:bg-white text-[#2D2926]"
-                />
-              </div>
-
-              <div className="space-y-1">
+              <div className="space-y-1 sm:col-span-2">
                 <label className="text-xs font-bold text-[#2D2926]">Email de Contact</label>
                 <input
                   type="email"
@@ -708,6 +1104,180 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
               </div>
 
             </div>
+          </div>
+        )}
+
+        {/* ================= 7. BASE DE DONNÉES & EXPORT GITHUB / VERCEL ================= */}
+        {activeSection === 'database' && (
+          <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#EAE7E0] shadow-2xs space-y-6">
+            <div className="border-b border-[#EAE7E0] pb-4">
+              <h2 className="text-base font-bold text-[#2D2926] flex items-center gap-2">
+                <Database className="w-4 h-4 text-[#5A5A40]" />
+                7. Base de Données, Sauvegardes & Déploiement Vercel / GitHub
+              </h2>
+              <p className="text-xs text-[#7A766F] mt-0.5">
+                Gérez facilement votre base de données : téléchargez une copie intégrale en JSON, restaurez vos données, ou exportez vers GitHub et Vercel sans risque d'erreur.
+              </p>
+            </div>
+
+            {/* Notification alert */}
+            {dbNotification && (
+              <div
+                className={`p-4 rounded-2xl text-xs font-semibold flex items-center gap-3 border shadow-2xs animate-in fade-in ${
+                  dbNotification.type === 'success'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                    : 'bg-rose-50 border-rose-200 text-rose-900'
+                }`}
+              >
+                {dbNotification.type === 'success' ? (
+                  <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+                )}
+                <div>
+                  <p className="font-bold">{dbNotification.message}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Live Database Overview Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] text-center">
+                <span className="text-[10px] font-bold text-[#7A766F] uppercase tracking-wider block">Produits Actifs</span>
+                <span className="text-xl font-black text-[#2D2926] font-mono mt-1 block">
+                  {dbStats?.totalProductsCount ?? '...'}
+                </span>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] text-center">
+                <span className="text-[10px] font-bold text-[#7A766F] uppercase tracking-wider block">Catégories</span>
+                <span className="text-xl font-black text-[#2D2926] font-mono mt-1 block">
+                  {dbStats?.categoryDistribution?.length ?? '...'}
+                </span>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] text-center">
+                <span className="text-[10px] font-bold text-[#7A766F] uppercase tracking-wider block">Commandes</span>
+                <span className="text-xl font-black text-[#2D2926] font-mono mt-1 block">
+                  {dbStats?.ordersToday !== undefined ? dbStats.ordersToday + dbStats.pendingOrdersCount : '...'}
+                </span>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] text-center">
+                <span className="text-[10px] font-bold text-[#7A766F] uppercase tracking-wider block">Clients</span>
+                <span className="text-xl font-black text-[#2D2926] font-mono mt-1 block">
+                  {dbStats?.totalCustomersCount ?? '...'}
+                </span>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] text-center col-span-2 sm:col-span-1">
+                <span className="text-[10px] font-bold text-[#7A766F] uppercase tracking-wider block">Stock Faible</span>
+                <span className={`text-xl font-black font-mono mt-1 block ${dbStats?.lowStockProductsCount > 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
+                  {dbStats?.lowStockProductsCount ?? '0'}
+                </span>
+              </div>
+            </div>
+
+            {/* Action Grid: Export & Import */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              
+              {/* 1. Export JSON */}
+              <div className="p-5 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-[#5A5A40]/10 text-[#5A5A40] rounded-xl">
+                      <Download className="w-4 h-4" />
+                    </div>
+                    <h3 className="text-sm font-bold text-[#2D2926]">
+                      Exporter la Base de Données (JSON)
+                    </h3>
+                  </div>
+                  <p className="text-xs text-[#7A766F] leading-relaxed">
+                    Téléchargez un fichier de sauvegarde complet contenant tous vos produits, commandes, clients, catégories, zones de livraison et réglages.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleExportDatabase}
+                  disabled={exportingDb}
+                  className="w-full py-3 px-4 rounded-xl bg-[#5A5A40] hover:bg-[#4A4A30] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>{exportingDb ? 'Préparation du fichier...' : 'Télécharger la Sauvegarde (.JSON)'}</span>
+                </button>
+              </div>
+
+              {/* 2. Import / Restore JSON */}
+              <div className="p-5 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-emerald-600/10 text-emerald-700 rounded-xl">
+                      <Upload className="w-4 h-4" />
+                    </div>
+                    <h3 className="text-sm font-bold text-[#2D2926]">
+                      Importer / Restaurer un Fichier
+                    </h3>
+                  </div>
+                  <p className="text-xs text-[#7A766F] leading-relaxed">
+                    Restaurez instantanément vos données à partir d'un fichier de sauvegarde JSON sur n'importe quel hébergement (Vercel, Cloud Run, etc.).
+                  </p>
+                </div>
+
+                <div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json,application/json"
+                    onChange={handleImportFileSelected}
+                    className="hidden"
+                    id="db-file-import-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={importingDb}
+                    className="w-full py-3 px-4 rounded-xl bg-white border border-[#EAE7E0] hover:bg-stone-50 text-[#2D2926] font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs disabled:opacity-50"
+                  >
+                    <Upload className="w-4 h-4 text-emerald-600" />
+                    <span>{importingDb ? 'Importation en cours...' : 'Sélectionner un fichier JSON'}</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Vercel & GitHub Deployment Tips */}
+            <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-3">
+              <div className="flex items-center gap-2 text-amber-900 font-bold text-xs">
+                <FileCode className="w-4 h-4 text-amber-700" />
+                <span>Compatibilité Déploiement GitHub & Vercel Sans Erreur :</span>
+              </div>
+              <ul className="text-xs text-amber-900/80 space-y-1.5 list-disc pl-5">
+                <li>
+                  <strong>Configuration Vercel incluse :</strong> Le fichier <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono text-[11px]">vercel.json</code> et le point d'entrée <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono text-[11px]">/api/index.ts</code> sont déjà préconfigurés pour un déploiement instantané sans erreur.
+                </li>
+                <li>
+                  <strong>Fichier de données initial :</strong> Le fichier <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono text-[11px]">data/store_db.json</code> contient tous vos produits de démonstration en Francs Djibouti (FDJ).
+                </li>
+                <li>
+                  <strong>Mode boutique en ligne :</strong> La boutique fonctionne 100% en commande en ligne avec livraison express dans tout Djibouti et paiement à la livraison (espèces, D-Money, Waafi).
+                </li>
+              </ul>
+            </div>
+
+            {/* Reset to initial Djibouti Seed */}
+            <div className="pt-2 flex items-center justify-between border-t border-[#EAE7E0]">
+              <div className="text-xs text-[#7A766F]">
+                <span>Remettre les données d'exemple initiales de Djibouti</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleResetDatabase}
+                disabled={resettingDb}
+                className="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${resettingDb ? 'animate-spin' : ''}`} />
+                <span>{resettingDb ? 'Réinitialisation...' : 'Réinitialiser aux Données Démo'}</span>
+              </button>
+            </div>
+
           </div>
         )}
 

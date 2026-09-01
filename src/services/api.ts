@@ -251,6 +251,23 @@ export const api = {
     return handleResponse<DashboardStats>(res);
   },
 
+  // Database Export & Import
+  async exportDatabase(): Promise<any> {
+    const res = await fetch(`${API_BASE}/database/export`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse<any>(res);
+  },
+
+  async importDatabase(data: any): Promise<{ success: boolean; message: string; counts: any }> {
+    const res = await fetch(`${API_BASE}/database/import`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data)
+    });
+    return handleResponse<{ success: boolean; message: string; counts: any }>(res);
+  },
+
   // Seed / Reset
   async resetDatabase(): Promise<{ success: boolean; message: string }> {
     const res = await fetch(`${API_BASE}/seed/reset`, {

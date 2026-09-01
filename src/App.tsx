@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { QuickCartDrawer } from './components/QuickCartDrawer';
 import { OrderTrackerModal } from './components/OrderTrackerModal';
+import { ThemeStyle } from './components/ThemeStyle';
 
 import { HomePage } from './pages/HomePage';
 import { CatalogPage } from './pages/CatalogPage';
@@ -229,7 +230,9 @@ function MainApp() {
   // --- PUBLIC VIEWS ---
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#3D3A35] font-sans">
-      
+      {/* Dynamic Theme Injector */}
+      <ThemeStyle settings={settings} />
+
       {/* Header */}
       <Header
         currentView={currentView}
@@ -284,6 +287,7 @@ function MainApp() {
         {currentView === 'cart' && (
           <CartPage
             deliveryZones={deliveryZones}
+            settings={settings}
             onNavigateToCheckout={() => navigate('checkout')}
             onNavigateToCatalog={() => navigate('catalog')}
           />
@@ -292,6 +296,7 @@ function MainApp() {
         {currentView === 'checkout' && (
           <CheckoutPage
             deliveryZones={deliveryZones}
+            settings={settings}
             onOrderCompleted={handleOrderCompleted}
             onNavigateBack={() => navigate('cart')}
           />
@@ -300,6 +305,7 @@ function MainApp() {
         {currentView === 'order-success' && completedOrder && (
           <OrderSuccessPage
             order={completedOrder}
+            settings={settings}
             onNavigateHome={() => navigate('home')}
             onTrackOrder={(orderNum) => navigate('track', { orderNumber: orderNum })}
           />
@@ -323,6 +329,7 @@ function MainApp() {
 
       {/* Quick Cart Slide-Over Drawer */}
       <QuickCartDrawer
+        settings={settings}
         onNavigateToCheckout={() => navigate('checkout')}
         onNavigateToCatalog={() => navigate('catalog')}
       />

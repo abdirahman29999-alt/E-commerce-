@@ -1,0 +1,929 @@
+{
+  "products": [
+    {
+      "id": "prod-1",
+      "name": "Powerbank 20 000 mAh Charge Rapide 22.5W avec Affichage LED",
+      "slug": "powerbank-20000mah-charge-rapide",
+      "sku": "PWR-20K-BLK",
+      "price": 6500,
+      "compareAtPrice": 8500,
+      "discountPercent": 24,
+      "stock": 18,
+      "lowStockThreshold": 5,
+      "categoryId": "cat-tel",
+      "categoryName": "Téléphonie & Câbles",
+      "description": "Batterie externe haute capacité 20 000 mAh avec charge ultra-rapide 22.5W Power Delivery & QuickCharge 3.0. Écran numérique LED affichant le pourcentage exact de batterie. 2 ports USB-A et 1 port USB-C bidirectionnel. Parfait pour les déplacements sous la chaleur de Djibouti.",
+      "images": [
+        "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 4.9,
+      "reviewsCount": 38,
+      "tags": [
+        "Batterie",
+        "Charge Rapide",
+        "USB-C"
+      ],
+      "createdAt": "2026-08-01T10:00:00.000Z",
+      "updatedAt": "2026-08-25T14:30:00.000Z"
+    },
+    {
+      "id": "prod-2",
+      "name": "Écouteurs Sans Fil Pro TWS avec Réduction Active du Bruit (ANC)",
+      "slug": "ecouteurs-sans-fil-pro-tws-anc",
+      "sku": "AUD-TWS-PRO",
+      "price": 9500,
+      "compareAtPrice": 13000,
+      "discountPercent": 27,
+      "stock": 12,
+      "lowStockThreshold": 4,
+      "categoryId": "cat-audio",
+      "categoryName": "Écouteurs & Audio",
+      "description": "Son haute fidélité avec basses puissantes et réduction active du bruit ambiant. Autonomie de 30 heures avec le boîtier de charge sans fil. Microphones HD avec isolation vocale pour des appels cristallins même dans le vent.",
+      "images": [
+        "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "isNew": true,
+      "isPromo": true,
+      "rating": 4.8,
+      "reviewsCount": 52,
+      "tags": [
+        "Audio",
+        "Bluetooth 5.3",
+        "ANC"
+      ],
+      "createdAt": "2026-08-05T09:00:00.000Z",
+      "updatedAt": "2026-08-28T11:00:00.000Z"
+    },
+    {
+      "id": "prod-3",
+      "name": "Smartwatch Pro Écran AMOLED 1.43\" avec Appel Bluetooth & Suivi Santé",
+      "slug": "smartwatch-pro-ecran-amoled",
+      "sku": "WTC-SMART-01",
+      "price": 14000,
+      "compareAtPrice": 18500,
+      "discountPercent": 24,
+      "stock": 8,
+      "lowStockThreshold": 3,
+      "categoryId": "cat-montres",
+      "categoryName": "Montres & Smartwatches",
+      "description": "Montre connectée haut de gamme avec superbe écran tactile AMOLED Always-On. Passez et recevez des appels en direct via haut-parleur et micro intégrés. Suivi cardiaque 24/7, SpO2, suivi sommeil et plus de 100 modes sportifs. Boîtier en alliage de zinc étanche IP68.",
+      "images": [
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "isNew": true,
+      "isPromo": true,
+      "rating": 4.9,
+      "reviewsCount": 29,
+      "tags": [
+        "Montre connectée",
+        "AMOLED",
+        "Santé"
+      ],
+      "createdAt": "2026-08-10T12:00:00.000Z",
+      "updatedAt": "2026-08-29T16:00:00.000Z"
+    },
+    {
+      "id": "prod-4",
+      "name": "Chargeur Mural GaN 65W Ultra-Compact 3 Ports (2 USB-C + 1 USB-A)",
+      "slug": "chargeur-mural-gan-65w",
+      "sku": "CHR-GAN-65W",
+      "price": 5500,
+      "compareAtPrice": 7000,
+      "discountPercent": 21,
+      "stock": 25,
+      "lowStockThreshold": 5,
+      "categoryId": "cat-tel",
+      "categoryName": "Téléphonie & Câbles",
+      "description": "Technologie GaN III dernière génération permettant de recharger simultanément votre ordinateur portable (MacBook, Dell, HP), tablette et smartphone à pleine vitesse sans surchauffe.",
+      "images": [
+        "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 4.7,
+      "reviewsCount": 22,
+      "tags": [
+        "Chargeur",
+        "GaN",
+        "Fast Charge"
+      ],
+      "createdAt": "2026-08-02T10:00:00.000Z",
+      "updatedAt": "2026-08-20T10:00:00.000Z"
+    },
+    {
+      "id": "prod-5",
+      "name": "Câble Renforcé en Nylon Tressé Type-C vers Type-C 100W (2 Mètres)",
+      "slug": "cable-renforce-type-c-100w",
+      "sku": "CBL-TC-100W",
+      "price": 2200,
+      "compareAtPrice": 3000,
+      "discountPercent": 26,
+      "stock": 45,
+      "lowStockThreshold": 10,
+      "categoryId": "cat-tel",
+      "categoryName": "Téléphonie & Câbles",
+      "description": "Câble ultra-résistant testé pour plus de 25 000 pliages. Prise en charge de la charge ultra-rapide jusqu’à 100W (20V/5A) et transfert de données haute vitesse.",
+      "images": [
+        "https://images.unsplash.com/photo-1541689592655-f5f52825a3b8?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": false,
+      "rating": 4.9,
+      "reviewsCount": 64,
+      "tags": [
+        "Câble",
+        "USB-C",
+        "100W"
+      ],
+      "createdAt": "2026-07-20T08:00:00.000Z",
+      "updatedAt": "2026-08-15T09:00:00.000Z"
+    },
+    {
+      "id": "prod-6",
+      "name": "Casque Audio Bluetooth Over-Ear Hi-Res avec Coussinets à Mémoire de Forme",
+      "slug": "casque-audio-bluetooth-over-ear",
+      "sku": "AUD-HD-OVER",
+      "price": 12500,
+      "compareAtPrice": 16000,
+      "discountPercent": 22,
+      "stock": 7,
+      "lowStockThreshold": 3,
+      "categoryId": "cat-audio",
+      "categoryName": "Écouteurs & Audio",
+      "description": "Casque audio circum-auriculaire offrant une immersion sonore exceptionnelle. Transducteurs de 40mm, autonomie record de 50 heures, microphone intégré et entrée jack 3.5mm de secours.",
+      "images": [
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 4.8,
+      "reviewsCount": 19,
+      "tags": [
+        "Casque",
+        "Bluetooth",
+        "Hi-Res"
+      ],
+      "createdAt": "2026-08-04T11:00:00.000Z",
+      "updatedAt": "2026-08-25T11:00:00.000Z"
+    },
+    {
+      "id": "prod-7",
+      "name": "Enceinte Portable Étanche IPX7 Bluetooth 5.3 avec Bass Boost (15W)",
+      "slug": "enceinte-portable-etanche-ipx7",
+      "sku": "AUD-SPK-IPX7",
+      "price": 7800,
+      "compareAtPrice": 10000,
+      "discountPercent": 22,
+      "stock": 14,
+      "lowStockThreshold": 4,
+      "categoryId": "cat-audio",
+      "categoryName": "Écouteurs & Audio",
+      "description": "Enceinte tout-terrain résistante à l’eau et au sable de plage (idéale pour les sorties à Doraleh ou Khor Ambado). 12h de musique non-stop et jeu de lumières LED d’ambiance.",
+      "images": [
+        "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": true,
+      "isPromo": true,
+      "rating": 4.6,
+      "reviewsCount": 31,
+      "tags": [
+        "Enceinte",
+        "Étanche",
+        "Bass Boost"
+      ],
+      "createdAt": "2026-08-12T14:00:00.000Z",
+      "updatedAt": "2026-08-27T10:00:00.000Z"
+    },
+    {
+      "id": "prod-8",
+      "name": "Montre Homme Chronographe Luxe en Acier Inoxydable Noir & Or",
+      "slug": "montre-homme-chronographe-luxe",
+      "sku": "WTC-LUX-M01",
+      "price": 16500,
+      "compareAtPrice": 22000,
+      "discountPercent": 25,
+      "stock": 5,
+      "lowStockThreshold": 2,
+      "categoryId": "cat-montres",
+      "categoryName": "Montres & Smartwatches",
+      "description": "Mouvement à quartz haute précision japonais. Verre minéral trempé anti-rayures, cadran 42mm avec chronomètre et guichet date. Étanche 30M avec bracelet réglable à boucle déployante.",
+      "images": [
+        "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 5,
+      "reviewsCount": 16,
+      "tags": [
+        "Montre Classique",
+        "Acier Inox",
+        "Cadeau"
+      ],
+      "createdAt": "2026-08-01T15:00:00.000Z",
+      "updatedAt": "2026-08-26T12:00:00.000Z"
+    },
+    {
+      "id": "prod-9",
+      "name": "Lunettes de Soleil Polarisées UV400 Monture Métallique Noire Mat",
+      "slug": "lunettes-soleil-polarisees-uv400",
+      "sku": "MOD-SUN-UV400",
+      "price": 4500,
+      "compareAtPrice": 6000,
+      "discountPercent": 25,
+      "stock": 22,
+      "lowStockThreshold": 5,
+      "categoryId": "cat-mode",
+      "categoryName": "Mode, Sacs & Bijoux",
+      "description": "Protection maximale catégorie 3 contre l’éblouissement intense du soleil djiboutien. Verres polarisés TAC réduisant la fatigue visuelle lors de la conduite.",
+      "images": [
+        "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "isNew": false,
+      "isPromo": false,
+      "rating": 4.7,
+      "reviewsCount": 42,
+      "tags": [
+        "Lunettes",
+        "UV400",
+        "Polarisé"
+      ],
+      "createdAt": "2026-07-28T09:00:00.000Z",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "prod-10",
+      "name": "Sacoche Bandoulière Antivol Imperméable avec Port de Charge USB",
+      "slug": "sacoche-bandouliere-antivol",
+      "sku": "MOD-BAG-ANTI",
+      "price": 6800,
+      "compareAtPrice": 9000,
+      "discountPercent": 24,
+      "stock": 11,
+      "lowStockThreshold": 4,
+      "categoryId": "cat-mode",
+      "categoryName": "Mode, Sacs & Bijoux",
+      "description": "Sacoche urbaine compacte et sécurisée avec fermeture à combinaison TSA et compartiment caché. Tissu Oxford haute densité résistant aux coupures et aux éclaboussures. Compartiment pour tablette 9.7\".",
+      "images": [
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": true,
+      "isPromo": true,
+      "rating": 4.8,
+      "reviewsCount": 25,
+      "tags": [
+        "Sacoche",
+        "Antivol",
+        "Imperméable"
+      ],
+      "createdAt": "2026-08-14T11:00:00.000Z",
+      "updatedAt": "2026-08-28T10:00:00.000Z"
+    },
+    {
+      "id": "prod-11",
+      "name": "Support Smartphone Voiture Magnétique Rotatif 360° pour Grille d’Aération",
+      "slug": "support-voiture-magnetique-360",
+      "sku": "AUT-HLD-MAG",
+      "price": 2500,
+      "compareAtPrice": 3500,
+      "discountPercent": 28,
+      "stock": 30,
+      "lowStockThreshold": 5,
+      "categoryId": "cat-auto",
+      "categoryName": "Accessoires Auto & Bureau",
+      "description": "6 puissants aimants néodyme N52 maintenant fermement votre smartphone même sur routes cahoteuses. Rotation libre à 360 degrés pour navigation GPS aisée.",
+      "images": [
+        "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": false,
+      "rating": 4.9,
+      "reviewsCount": 77,
+      "tags": [
+        "Auto",
+        "Support GPS",
+        "Aimant"
+      ],
+      "createdAt": "2026-07-15T12:00:00.000Z",
+      "updatedAt": "2026-08-10T14:00:00.000Z"
+    },
+    {
+      "id": "prod-12",
+      "name": "Chargeur Allume-Cigare Métallique Rapide 45W Double Port USB-C PD & QC3.0",
+      "slug": "chargeur-allume-cigare-45w",
+      "sku": "AUT-CHR-45W",
+      "price": 3200,
+      "compareAtPrice": 4200,
+      "discountPercent": 23,
+      "stock": 19,
+      "lowStockThreshold": 5,
+      "categoryId": "cat-auto",
+      "categoryName": "Accessoires Auto & Bureau",
+      "description": "Corps compact en alliage d’aluminium dissipant la chaleur. Rétro-éclairage LED discret pour insertion nocturne sans distraction. Protection contre surtensions.",
+      "images": [
+        "https://images.unsplash.com/photo-1563770660941-20978e870e26?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 4.8,
+      "reviewsCount": 34,
+      "tags": [
+        "Auto",
+        "Chargeur",
+        "Aluminium"
+      ],
+      "createdAt": "2026-08-03T10:00:00.000Z",
+      "updatedAt": "2026-08-20T11:00:00.000Z"
+    },
+    {
+      "id": "prod-13",
+      "name": "Hub Adaptateur USB-C 7-en-1 HDMI 4K, 3x USB 3.0, Lecteur SD & PD 100W",
+      "slug": "hub-adaptateur-usb-c-7en1",
+      "sku": "ACC-HUB-7IN1",
+      "price": 8500,
+      "compareAtPrice": 11000,
+      "discountPercent": 22,
+      "stock": 9,
+      "lowStockThreshold": 3,
+      "categoryId": "cat-tel",
+      "categoryName": "Téléphonie & Câbles",
+      "description": "Connectez instantanément votre laptop, tablette ou smartphone à un écran TV/Projecteur 4K, transférez vos photos et branchez vos clés USB tout en chargeant votre appareil.",
+      "images": [
+        "https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": true,
+      "isPromo": false,
+      "rating": 4.9,
+      "reviewsCount": 15,
+      "tags": [
+        "Adaptateur",
+        "HDMI 4K",
+        "USB 3.0"
+      ],
+      "createdAt": "2026-08-16T14:00:00.000Z",
+      "updatedAt": "2026-08-28T09:00:00.000Z"
+    },
+    {
+      "id": "prod-14",
+      "name": "Bracelet Homme en Cuir Véritable Tressé avec Fermoir Magnétique Inox",
+      "slug": "bracelet-homme-cuir-fermoir-inox",
+      "sku": "MOD-BRC-CUIR",
+      "price": 3500,
+      "compareAtPrice": 4800,
+      "discountPercent": 27,
+      "stock": 14,
+      "lowStockThreshold": 4,
+      "categoryId": "cat-mode",
+      "categoryName": "Mode, Sacs & Bijoux",
+      "description": "Accessoire moderne et raffiné en cuir véritable marron foncé / noir avec insert gravé en acier inoxydable résistant à la transpiration et à l’eau.",
+      "images": [
+        "https://images.unsplash.com/photo-1611591475155-4286423ce657?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 4.6,
+      "reviewsCount": 28,
+      "tags": [
+        "Bijoux",
+        "Cuir",
+        "Élégance"
+      ],
+      "createdAt": "2026-08-08T15:00:00.000Z",
+      "updatedAt": "2026-08-25T16:00:00.000Z"
+    },
+    {
+      "id": "prod-15",
+      "name": "Trépied Selfie Stick Bluetooth avec Télécommande Détachable & Lumière LED",
+      "slug": "trepied-selfie-stick-bluetooth",
+      "sku": "ACC-SLF-TRP",
+      "price": 4200,
+      "compareAtPrice": 5500,
+      "discountPercent": 23,
+      "stock": 16,
+      "lowStockThreshold": 4,
+      "categoryId": "cat-tel",
+      "categoryName": "Téléphonie & Câbles",
+      "description": "Extension jusqu’à 105 cm, pieds de trépied renforcés, rotation 360° et mini anneau lumineux intégré à 3 niveaux de luminosité pour vidéos TikTok, réceptions et voyages.",
+      "images": [
+        "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": false,
+      "rating": 4.7,
+      "reviewsCount": 39,
+      "tags": [
+        "Trépied",
+        "Selfie",
+        "TikTok"
+      ],
+      "createdAt": "2026-08-07T10:00:00.000Z",
+      "updatedAt": "2026-08-22T14:00:00.000Z"
+    },
+    {
+      "id": "prod-16",
+      "name": "Smart Band Tracker Sportif & Fréquence Cardiaque Étanche 5ATM",
+      "slug": "smart-band-tracker-sportif",
+      "sku": "WTC-BND-SPRT",
+      "price": 5900,
+      "compareAtPrice": 7500,
+      "discountPercent": 21,
+      "stock": 3,
+      "lowStockThreshold": 5,
+      "categoryId": "cat-montres",
+      "categoryName": "Montres & Smartwatches",
+      "description": "Bracelets légers avec écran tactile couleur, podomètre, suivi du sommeil et notifications d’appels WhatsApp/SMS. 14 jours d’autonomie sur une seule charge.",
+      "images": [
+        "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=800&auto=format&fit=crop&q=80"
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "isNew": false,
+      "isPromo": true,
+      "rating": 4.5,
+      "reviewsCount": 20,
+      "tags": [
+        "Fitness",
+        "Tracker",
+        "5ATM"
+      ],
+      "createdAt": "2026-07-22T11:00:00.000Z",
+      "updatedAt": "2026-08-24T12:00:00.000Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-tel",
+      "name": "Téléphonie & Câbles",
+      "slug": "telephonie-cables",
+      "icon": "Smartphone",
+      "image": "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&auto=format&fit=crop&q=80",
+      "description": "Chargeurs rapides, câbles renforcés, supports et adaptateurs pour tous smartphones.",
+      "isActive": true,
+      "productCount": 5
+    },
+    {
+      "id": "cat-audio",
+      "name": "Écouteurs & Audio",
+      "slug": "ecouteurs-audio",
+      "icon": "Headphones",
+      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80",
+      "description": "Écouteurs sans fil Bluetooth, casques réducteurs de bruit et enceintes portables.",
+      "isActive": true,
+      "productCount": 4
+    },
+    {
+      "id": "cat-montres",
+      "name": "Montres & Smartwatches",
+      "slug": "montres-smartwatches",
+      "icon": "Watch",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80",
+      "description": "Montres connectées AMOLED, bracelets sportifs et montres élégantes pour hommes et femmes.",
+      "isActive": true,
+      "productCount": 4
+    },
+    {
+      "id": "cat-mode",
+      "name": "Mode, Sacs & Bijoux",
+      "slug": "mode-sacs-bijoux",
+      "icon": "Glasses",
+      "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80",
+      "description": "Lunettes de soleil UV400, sacoches étanches, portefeuilles et bijoux en acier inoxydable.",
+      "isActive": true,
+      "productCount": 4
+    },
+    {
+      "id": "cat-auto",
+      "name": "Accessoires Auto & Bureau",
+      "slug": "accessoires-auto-bureau",
+      "icon": "Car",
+      "image": "https://images.unsplash.com/photo-1563770660941-20978e870e26?w=600&auto=format&fit=crop&q=80",
+      "description": "Supports magnétiques de voiture, chargeurs allume-cigare rapides et hubs USB-C.",
+      "isActive": true,
+      "productCount": 3
+    }
+  ],
+  "deliveryZones": [
+    {
+      "id": "zone-centre",
+      "name": "Djibouti-Ville Centre / Héron / Plateau / Marabout",
+      "price": 800,
+      "estimatedHours": "Livraison en 2 à 4 heures",
+      "description": "Livraison express à domicile ou au bureau dans le centre de Djibouti.",
+      "isActive": true
+    },
+    {
+      "id": "zone-balbala",
+      "name": "Balbala / Hayabley / Cheik Moussa",
+      "price": 1000,
+      "estimatedHours": "Livraison le jour même",
+      "description": "Livraison rapide assurée par nos coursiers moto.",
+      "isActive": true
+    },
+    {
+      "id": "zone-haramous",
+      "name": "Haramous / Gabode / Ambouli / Aéroport",
+      "price": 1000,
+      "estimatedHours": "Livraison en 2 à 4 heures",
+      "description": "Livraison directe sécurisée.",
+      "isActive": true
+    },
+    {
+      "id": "zone-pk12",
+      "name": "PK12 / Nagad / Palmeraie / Doraleh",
+      "price": 1500,
+      "estimatedHours": "Livraison en 24h",
+      "description": "Livraison en périphérie de Djibouti-ville.",
+      "isActive": true
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord-1025",
+      "orderNumber": "DJ-1025",
+      "customerName": "Ibrahim Moussa Doualeh",
+      "customerPhone": "+253 77 55 66 77",
+      "district": "Quartier 7",
+      "address": "Boulevard de Gaulle, en face de la pharmacie",
+      "city": "Djibouti",
+      "deliveryNotes": "Appeler 10 min avant d’arriver",
+      "deliveryZoneId": "zone-centre",
+      "deliveryZoneName": "Djibouti-Ville Centre",
+      "deliveryFee": 800,
+      "subtotal": 6500,
+      "total": 7300,
+      "paymentMethod": "cash_on_delivery",
+      "paymentStatus": "pending",
+      "status": "nouvelle",
+      "items": [
+        {
+          "productId": "prod-1",
+          "productName": "Powerbank 20 000 mAh Charge Rapide 22.5W",
+          "sku": "PWR-20K-BLK",
+          "price": 6500,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&auto=format&fit=crop&q=80",
+          "total": 6500
+        }
+      ],
+      "statusHistory": [
+        {
+          "status": "nouvelle",
+          "timestamp": "2026-08-30T19:40:00.000Z",
+          "note": "Commande reçue en ligne via smartphone"
+        }
+      ],
+      "createdAt": "2026-08-30T19:40:00.000Z",
+      "updatedAt": "2026-08-30T19:40:00.000Z"
+    },
+    {
+      "id": "ord-1024",
+      "orderNumber": "DJ-1024",
+      "customerName": "Fatouma Omar Daher",
+      "customerPhone": "+253 77 65 21 89",
+      "customerEmail": "fatouma.daher@yahoo.fr",
+      "district": "Balbala",
+      "address": "Près du Lycée de Balbala, Maison portail vert",
+      "city": "Djibouti",
+      "deliveryNotes": "Disponible à partir de 17h",
+      "deliveryZoneId": "zone-balbala",
+      "deliveryZoneName": "Balbala",
+      "deliveryFee": 1000,
+      "subtotal": 19000,
+      "total": 20000,
+      "paymentMethod": "d_money",
+      "paymentStatus": "paid",
+      "status": "en_livraison",
+      "items": [
+        {
+          "productId": "prod-2",
+          "productName": "Écouteurs Sans Fil Pro TWS ANC",
+          "sku": "AUD-TWS-PRO",
+          "price": 9500,
+          "quantity": 2,
+          "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80",
+          "total": 19000
+        }
+      ],
+      "statusHistory": [
+        {
+          "status": "nouvelle",
+          "timestamp": "2026-08-30T10:15:00.000Z",
+          "note": "Paiement D-Money confirmé"
+        },
+        {
+          "status": "confirmee",
+          "timestamp": "2026-08-30T10:30:00.000Z",
+          "note": "Vérification stock et emballage"
+        },
+        {
+          "status": "preparation",
+          "timestamp": "2026-08-30T11:00:00.000Z",
+          "note": "Colis prêt"
+        },
+        {
+          "status": "en_livraison",
+          "timestamp": "2026-08-30T15:00:00.000Z",
+          "note": "Remis au coursier moto Balbala"
+        }
+      ],
+      "createdAt": "2026-08-30T10:15:00.000Z",
+      "updatedAt": "2026-08-30T15:00:00.000Z"
+    },
+    {
+      "id": "ord-1023",
+      "orderNumber": "DJ-1023",
+      "customerName": "Mohamed Ali Hassan",
+      "customerPhone": "+253 77 84 92 10",
+      "customerEmail": "mohamed.ali@gmail.com",
+      "district": "Héron",
+      "address": "Avenue Maréchal Joffre, Villa 14",
+      "city": "Djibouti",
+      "deliveryZoneId": "zone-centre",
+      "deliveryZoneName": "Djibouti-Ville Centre / Héron",
+      "deliveryFee": 800,
+      "subtotal": 14000,
+      "total": 14800,
+      "paymentMethod": "cash_on_delivery",
+      "paymentStatus": "paid",
+      "status": "livree",
+      "items": [
+        {
+          "productId": "prod-3",
+          "productName": "Smartwatch Pro Écran AMOLED 1.43\"",
+          "sku": "WTC-SMART-01",
+          "price": 14000,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80",
+          "total": 14000
+        }
+      ],
+      "statusHistory": [
+        {
+          "status": "nouvelle",
+          "timestamp": "2026-08-29T18:30:00.000Z"
+        },
+        {
+          "status": "confirmee",
+          "timestamp": "2026-08-29T18:45:00.000Z"
+        },
+        {
+          "status": "en_livraison",
+          "timestamp": "2026-08-29T19:30:00.000Z"
+        },
+        {
+          "status": "livree",
+          "timestamp": "2026-08-29T20:45:00.000Z",
+          "note": "Reçu et payé en espèces"
+        }
+      ],
+      "createdAt": "2026-08-29T18:30:00.000Z",
+      "updatedAt": "2026-08-29T20:45:00.000Z"
+    },
+    {
+      "id": "ord-1022",
+      "orderNumber": "DJ-1022",
+      "customerName": "Ahmed Youssouf Barkat",
+      "customerPhone": "+253 77 33 44 55",
+      "district": "Haramous",
+      "address": "Zone Ambassades, Rue 12",
+      "city": "Djibouti",
+      "deliveryZoneId": "zone-haramous",
+      "deliveryZoneName": "Haramous",
+      "deliveryFee": 1000,
+      "subtotal": 21000,
+      "total": 22000,
+      "paymentMethod": "waafi",
+      "paymentStatus": "paid",
+      "status": "livree",
+      "items": [
+        {
+          "productId": "prod-8",
+          "productName": "Montre Homme Chronographe Luxe",
+          "sku": "WTC-LUX-M01",
+          "price": 16500,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800&auto=format&fit=crop&q=80",
+          "total": 16500
+        },
+        {
+          "productId": "prod-9",
+          "productName": "Lunettes de Soleil Polarisées UV400",
+          "sku": "MOD-SUN-UV400",
+          "price": 4500,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=80",
+          "total": 4500
+        }
+      ],
+      "statusHistory": [
+        {
+          "status": "nouvelle",
+          "timestamp": "2026-08-28T16:45:00.000Z"
+        },
+        {
+          "status": "confirmee",
+          "timestamp": "2026-08-28T17:00:00.000Z"
+        },
+        {
+          "status": "livree",
+          "timestamp": "2026-08-28T18:30:00.000Z"
+        }
+      ],
+      "createdAt": "2026-08-28T16:45:00.000Z",
+      "updatedAt": "2026-08-28T18:30:00.000Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust-1",
+      "name": "Mohamed Ali Hassan",
+      "phone": "+253 77 84 92 10",
+      "email": "mohamed.ali@gmail.com",
+      "district": "Héron",
+      "address": "Avenue Maréchal Joffre, Villa 14",
+      "ordersCount": 4,
+      "totalSpent": 42000,
+      "lastOrderDate": "2026-08-29T18:30:00.000Z",
+      "createdAt": "2026-06-10T14:00:00.000Z"
+    },
+    {
+      "id": "cust-2",
+      "name": "Fatouma Omar Daher",
+      "phone": "+253 77 65 21 89",
+      "email": "fatouma.daher@yahoo.fr",
+      "district": "Balbala",
+      "address": "Près du Lycée de Balbala",
+      "ordersCount": 3,
+      "totalSpent": 27500,
+      "lastOrderDate": "2026-08-30T10:15:00.000Z",
+      "createdAt": "2026-07-01T09:00:00.000Z"
+    },
+    {
+      "id": "cust-3",
+      "name": "Ahmed Youssouf Barkat",
+      "phone": "+253 77 33 44 55",
+      "email": "ahmed.barkat@outlook.com",
+      "district": "Haramous",
+      "address": "Zone Ambassades, Rue 12",
+      "ordersCount": 2,
+      "totalSpent": 30500,
+      "lastOrderDate": "2026-08-28T16:45:00.000Z",
+      "createdAt": "2026-07-15T11:00:00.000Z"
+    },
+    {
+      "id": "cust-4",
+      "name": "Khadidja Ismael Aden",
+      "phone": "+253 77 99 88 77",
+      "email": "khadidja.aden@gmail.com",
+      "district": "Gabode 4",
+      "address": "Cité Gabode, Immeuble B",
+      "ordersCount": 2,
+      "totalSpent": 19000,
+      "lastOrderDate": "2026-08-27T14:00:00.000Z",
+      "createdAt": "2026-07-20T10:00:00.000Z"
+    },
+    {
+      "id": "cust-5",
+      "name": "Ibrahim Moussa Doualeh",
+      "phone": "+253 77 55 66 77",
+      "district": "Quartier 7",
+      "address": "Boulevard de Gaulle",
+      "ordersCount": 1,
+      "totalSpent": 6500,
+      "lastOrderDate": "2026-08-30T14:00:00.000Z",
+      "createdAt": "2026-08-30T14:00:00.000Z"
+    }
+  ],
+  "promotions": [
+    {
+      "id": "promo-1",
+      "code": "DJIBOUTI2026",
+      "title": "Offre Spéciale Bienvenue (-10%)",
+      "discountType": "percentage",
+      "discountValue": 10,
+      "minOrderAmount": 5000,
+      "startDate": "2026-08-01",
+      "endDate": "2026-12-31",
+      "isActive": true,
+      "usageCount": 42
+    },
+    {
+      "id": "promo-2",
+      "code": "LIVRAISONGRATUITE",
+      "title": "Frais de livraison offerts dès 15 000 FDJ",
+      "discountType": "fixed",
+      "discountValue": 1000,
+      "minOrderAmount": 15000,
+      "startDate": "2026-08-01",
+      "endDate": "2026-12-31",
+      "isActive": true,
+      "usageCount": 18
+    }
+  ],
+  "settings": {
+    "storeName": "DjiAccess Boutique",
+    "tagline": "Le n°1 des accessoires high-tech & mode à Djibouti",
+    "logo": "",
+    "logoText": "DjiAccess",
+    "logoSubtitle": "Accessoires • Djibouti",
+    "favicon": "",
+    "phone": "+253 77 12 34 56",
+    "whatsapp": "+253 77 12 34 56",
+    "email": "contact@djiaccess.dj",
+    "address": "Boutique 100% en ligne • Service de Livraison Express à Djibouti-Ville, Balbala, Héron & Environs",
+    "currency": "FDJ",
+    "currencySymbol": "FDJ",
+    "aboutText": "DjiAccess est la boutique djiboutienne de référence pour vos accessoires smartphones, écouteurs, montres connectées, chargeurs et articles de mode. Boutique 100% en ligne : commandez directement sur le site et recevez votre livraison express partout à Djibouti avec paiement sécurisé à la réception ou via D-Money / Waafi.",
+    "announcementBar": "🚚 Livraison express en moins de 3h à Djibouti-Ville & Balbala ! Paiement à la livraison accepté.",
+    "isAnnouncementActive": true,
+    "announcementTag": "DJIBOUTI 🇩🇯",
+    "heroImage": "",
+    "heroBadge": "COLLECTION PREMIUM D'ACCESSOIRES À DJIBOUTI",
+    "heroTitle": "L'excellence de l'accessoire au meilleur prix en FDJ.",
+    "heroSubtitle": "Powerbanks haute capacité, écouteurs sans fil avec réduction de bruit, montres connectées AMOLED, coques et chargeurs rapides. Livraison soignée en 2 à 4h partout à Djibouti !",
+    "heroPrimaryBtnText": "Explorer la Collection",
+    "heroPrimaryBtnLink": "catalog",
+    "heroSecondaryBtnText": "Offres du Moment",
+    "heroSecondaryBtnLink": "promos",
+    "heroTrust1Number": "2 - 4h",
+    "heroTrust1Label": "Livraison express",
+    "heroTrust2Number": "100%",
+    "heroTrust2Label": "Testé & Garanti",
+    "heroTrust3Number": "Paiement",
+    "heroTrust3Label": "À la réception",
+    "heroCardImage": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80",
+    "heroCardTag": "Coup de cœur de la semaine",
+    "heroCardDiscount": "-24%",
+    "heroCardTitle": "Smartwatch Pro Écran AMOLED 1.43\"",
+    "heroCardDesc": "Appels Bluetooth, étanche IP68, autonomie 10 jours et suivi complet de santé.",
+    "heroCardPrice": 14000,
+    "heroCardOldPrice": 18500,
+    "heroCardProductId": "prod-3",
+    "reassurance1Title": "Livraison Express Locale",
+    "reassurance1Desc": "Nos livreurs vous livrent directement chez vous ou à votre bureau à Djibouti-Ville, Balbala, Héron, Haramous ou PK12 en un temps record.",
+    "reassurance2Title": "Paiement 100% Flexible",
+    "reassurance2Desc": "Réglez en toute confiance en espèces à la livraison une fois votre commande inspectée, ou par D-Money / Waafi sans frais cachés.",
+    "reassurance3Title": "Authenticité & Service Client",
+    "reassurance3Desc": "Tous nos accessoires sont rigoureusement testés pour résister au climat de Djibouti. Une question ? Notre équipe vous répond immédiatement sur WhatsApp.",
+    "reassurance4Title": "Support Local 7j/7",
+    "reassurance4Desc": "Une équipe locale basée à Djibouti pour répondre à toutes vos questions avant et après vos commandes.",
+    "enableCashOnDelivery": true,
+    "enableDMoney": true,
+    "enableWaafi": true,
+    "dMoneyNumber": "77 12 34 56",
+    "waafiNumber": "77 12 34 56",
+    "facebookUrl": "https://facebook.com",
+    "instagramUrl": "https://instagram.com",
+    "tiktokUrl": "https://tiktok.com",
+    "seoTitle": "DjiAccess Djibouti - Accessoires Téléphone, Montres, Audio & Mode à Djibouti",
+    "seoDescription": "Achetez vos accessoires à Djibouti en Francs Djibouti (FDJ) : Powerbanks, Écouteurs sans fil, Smartwatches, Coques et Câbles. Livraison rapide à domicile."
+  },
+  "users": [
+    {
+      "id": "user-admin",
+      "username": "admin",
+      "email": "admin@djiaccess.dj",
+      "name": "Commerçant DjiAccess",
+      "role": "admin",
+      "passwordHash": "$2b$10$JN3eG/DppGrxY6hoH28mOupYDTBgwTI0d4g2wzC01DnLJq3WPqhK2"
+    }
+  ]
+}

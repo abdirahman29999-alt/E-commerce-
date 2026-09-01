@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, MessageCircle } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ShieldCheck, MessageCircle, Send } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { formatFDJ } from '../services/api';
 import type { StoreSettings } from '../types';
-import { generateCartWhatsAppUrl } from '../utils/whatsappHelper';
+import { handleWhatsAppOrderWithPhoto, generateCartWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface QuickCartDrawerProps {
   settings?: StoreSettings | null;
-  onNavigateToCheckout: () => void;
+  onNavigateToCheckout?: () => void;
   onNavigateToCatalog: () => void;
 }
 
 export const QuickCartDrawer: React.FC<QuickCartDrawerProps> = ({
   settings,
-  onNavigateToCheckout,
   onNavigateToCatalog
 }) => {
   const {
@@ -26,6 +25,24 @@ export const QuickCartDrawer: React.FC<QuickCartDrawerProps> = ({
     subtotal,
     itemCount
   } = useCart();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleWhatsAppCheckout = async () => {
+    setIsSubmitting(true);
+    try {
+      await handleWhatsAppOrderWithPhoto({
+        cart,
+        subtotal,
+        total: subtotal,
+        settings
+      });
+    } catch (err) {
+      console.warn('WhatsApp checkout error', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -179,40 +196,23 @@ export const QuickCartDrawer: React.FC<QuickCartDrawerProps> = ({
                     </span>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <button
-                      id="btn-drawer-checkout"
-                      type="button"
-                      onClick={() => {
-                        closeCartDrawer();
-                        onNavigateToCheckout();
-                      }}
-                      className="w-full py-3.5 px-4 rounded-full bg-[#5A5A40] hover:bg-[#4A4A30] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98 cursor-pointer"
-                    >
-                      <span>Passer la commande</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-
-                    <a
                       id="btn-drawer-whatsapp-checkout"
-                      href={generateCartWhatsAppUrl({
-                        cart,
-                        subtotal,
-                        total: subtotal,
-                        settings
-                      })}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-2.5 px-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-2xs transition-colors text-center cursor-pointer"
+                      type="button"
+                      onClick={handleWhatsAppCheckout}
+                      disabled={isSubmitting}
+                      className="w-full py-4 px-5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-98 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-75"
                     >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      <span>Commander directement par WhatsApp</span>
-                    </a>
+                      <MessageCircle className="w-5 h-5 fill-white/20 shrink-0" />
+                      <span>{isSubmitting ? 'Ouverture de WhatsApp...' : 'Passer la commande sur WhatsApp'}</span>
+                      <Send className="w-4 h-4 shrink-0 opacity-80" />
+                    </button>
                   </div>
 
-                  <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#7A766F]">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#5A5A40]" />
-                    <span>Paiement à la livraison ou par D-Money / Waafi</span>
+                  <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#7A766F] text-center">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#5A5A40] shrink-0" />
+                    <span>Livraison à domicile • Espèces, D-Money ou Waafi</span>
                   </div>
                 </div>
               )}

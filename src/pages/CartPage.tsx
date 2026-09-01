@@ -3,31 +3,30 @@ import {
   Trash2,
   Plus,
   Minus,
-  ArrowRight,
   ShoppingBag,
   Tag,
   Truck,
   ShieldCheck,
   CheckCircle,
   AlertCircle,
-  MessageCircle
+  MessageCircle,
+  Send
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { formatFDJ } from '../services/api';
 import type { DeliveryZone, StoreSettings } from '../types';
-import { generateCartWhatsAppUrl } from '../utils/whatsappHelper';
+import { handleWhatsAppOrderWithPhoto, generateCartWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface CartPageProps {
   deliveryZones: DeliveryZone[];
   settings?: StoreSettings | null;
-  onNavigateToCheckout: () => void;
+  onNavigateToCheckout?: () => void;
   onNavigateToCatalog: () => void;
 }
 
 export const CartPage: React.FC<CartPageProps> = ({
   deliveryZones,
   settings,
-  onNavigateToCheckout,
   onNavigateToCatalog
 }) => {
   const {
@@ -50,6 +49,25 @@ export const CartPage: React.FC<CartPageProps> = ({
   const [promoCodeInput, setPromoCodeInput] = useState('');
   const [promoMessage, setPromoMessage] = useState<{ success: boolean; text: string } | null>(null);
   const [loadingPromo, setLoadingPromo] = useState(false);
+  const [isSubmittingWhatsApp, setIsSubmittingWhatsApp] = useState(false);
+
+  const handleWhatsAppCheckout = async () => {
+    setIsSubmittingWhatsApp(true);
+    try {
+      await handleWhatsAppOrderWithPhoto({
+        cart,
+        subtotal,
+        deliveryFee,
+        total,
+        deliveryZone: selectedZone,
+        settings
+      });
+    } catch (err) {
+      console.warn('WhatsApp cart checkout error', err);
+    } finally {
+      setIsSubmittingWhatsApp(false);
+    }
+  };
 
   const handleApplyPromo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -303,38 +321,22 @@ export const CartPage: React.FC<CartPageProps> = ({
             {/* Action Buttons */}
             <div className="space-y-2.5 pt-2">
               <button
-                id="btn-cart-checkout"
-                type="button"
-                onClick={onNavigateToCheckout}
-                className="w-full py-3.5 px-4 rounded-full bg-[#5A5A40] hover:bg-[#4A4A30] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98 cursor-pointer"
-              >
-                <span>Passer la commande (Formulaire)</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              <a
                 id="btn-cart-whatsapp-checkout"
-                href={generateCartWhatsAppUrl({
-                  cart,
-                  subtotal,
-                  deliveryFee,
-                  total,
-                  deliveryZone: selectedZone,
-                  settings
-                })}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-colors text-center cursor-pointer"
+                type="button"
+                onClick={handleWhatsAppCheckout}
+                disabled={isSubmittingWhatsApp}
+                className="w-full py-4 px-5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-98 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all text-center cursor-pointer disabled:opacity-75"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>Commander directement par WhatsApp</span>
-              </a>
+                <MessageCircle className="w-5 h-5 fill-white/20 shrink-0" />
+                <span>{isSubmittingWhatsApp ? 'Ouverture de WhatsApp...' : 'Passer la commande sur WhatsApp'}</span>
+                <Send className="w-4 h-4 shrink-0 opacity-80" />
+              </button>
             </div>
 
             {/* Security Guarantee */}
-            <div className="p-3 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] flex items-center gap-2 text-[11px] text-[#7A766F]">
+            <div className="p-3.5 rounded-2xl bg-[#FAF9F6] border border-[#EAE7E0] flex items-center gap-2 text-[11px] text-[#7A766F]">
               <ShieldCheck className="w-4 h-4 text-[#5A5A40] shrink-0" />
-              <span>Commande sans compte requise. Paiement sécurisé à Djibouti.</span>
+              <span>Livraison express à domicile • Paiement en espèces ou D-Money / Waafi</span>
             </div>
           </div>
         </div>

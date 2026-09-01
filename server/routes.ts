@@ -309,7 +309,27 @@ apiRouter.get('/stats', requireAdminAuth, (req, res) => {
   res.json(stats);
 });
 
-// ===================== RESET / SEED =====================
+// ===================== RESET / SEED / EXPORT / IMPORT =====================
+apiRouter.get('/database/export', requireAdminAuth, (req, res) => {
+  try {
+    const backup = db.exportDatabase();
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename=djiaccess_db_backup_${Date.now()}.json`);
+    res.json(backup);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Impossible d\'exporter la base de données.' });
+  }
+});
+
+apiRouter.post('/database/import', requireAdminAuth, (req, res) => {
+  try {
+    const result = db.importDatabase(req.body);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || 'Échec de l\'importation de la base de données.' });
+  }
+});
+
 apiRouter.post('/seed/reset', requireAdminAuth, (req, res) => {
   db.resetDatabase();
   res.json({ success: true, message: 'Base de données réinitialisée avec les données de démonstration de Djibouti.' });

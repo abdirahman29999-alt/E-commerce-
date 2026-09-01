@@ -134,7 +134,7 @@ export interface StoreSettings {
   whatsapp: string;
   email: string;
   address: string;
-  openingHours: string;
+  openingHours?: string;
   currency: string;
   currencySymbol: string;
   aboutText: string;
