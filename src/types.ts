@@ -175,8 +175,6 @@ export interface StoreSettings {
   accentColor?: string;
   backgroundColor?: string;
   colorPreset?: string;
-  enableAutoDarkMode?: boolean;
-  darkModePreference?: 'auto' | 'light' | 'dark';
 
   // Reassurance Customization
   reassurance1Title?: string;

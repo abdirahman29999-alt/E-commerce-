@@ -12,4 +12,10 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use('/api', apiRouter);
 app.use('/', apiRouter);
 
+// Fallback JSON error handler for Vercel Serverless Function
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('[Vercel Serverless Error]', err);
+  res.status(500).json({ error: err?.message || 'Erreur interne du serveur sur Vercel' });
+});
+
 export default app;

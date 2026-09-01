@@ -24,11 +24,31 @@ function getAuthHeaders(): HeadersInit {
 }
 
 async function handleResponse<T>(res: Response): Promise<T> {
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || `Erreur serveur (${res.status})`);
+  const contentType = res.headers.get('content-type') || '';
+  
+  if (contentType.includes('application/json')) {
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || `Erreur serveur (${res.status})`);
+    }
+    return data as T;
   }
-  return data as T;
+
+  // If response is text/HTML (such as Vercel gateway error or serverless cold-start)
+  const text = await res.text();
+  if (!res.ok) {
+    let cleanMessage = `Erreur serveur (${res.status})`;
+    if (text && text.length < 120 && !text.includes('<html')) {
+      cleanMessage = text;
+    }
+    throw new Error(cleanMessage);
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return text as unknown as T;
+  }
 }
 
 export const api = {

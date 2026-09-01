@@ -25,12 +25,18 @@ interface DatabaseSchema {
   users: (AdminUser & { passwordHash: string })[];
 }
 
-const DB_DIR = path.join(process.cwd(), 'data');
-const DB_FILE = path.join(DB_DIR, 'store_db.json');
+let DB_DIR = path.join(process.cwd(), 'data');
+let DB_FILE = path.join(DB_DIR, 'store_db.json');
 
-// Ensure directory exists
-if (!fs.existsSync(DB_DIR)) {
-  fs.mkdirSync(DB_DIR, { recursive: true });
+// Ensure directory exists without crashing on read-only environments like Vercel
+try {
+  if (!fs.existsSync(DB_DIR)) {
+    fs.mkdirSync(DB_DIR, { recursive: true });
+  }
+} catch (e) {
+  // If filesystem is read-only (such as Vercel AWS Lambda /var/task), fallback to /tmp
+  DB_DIR = '/tmp';
+  DB_FILE = path.join(DB_DIR, 'store_db.json');
 }
 
 const defaultCategories: Category[] = [
@@ -566,8 +572,6 @@ const defaultSettings: StoreSettings = {
   accentColor: '#C5A880',
   backgroundColor: '#FAF9F6',
   colorPreset: 'olive',
-  enableAutoDarkMode: true,
-  darkModePreference: 'auto',
   aboutText: 'DjiAccess est la boutique djiboutienne de référence pour vos accessoires smartphones, écouteurs, montres connectées, chargeurs et articles de mode. Boutique 100% en ligne : commandez directement sur le site et recevez votre livraison express partout à Djibouti avec paiement sécurisé à la réception ou via D-Money / Waafi.',
   announcementBar: '🚚 Livraison express en moins de 3h à Djibouti-Ville & Balbala ! Paiement à la livraison accepté.',
   isAnnouncementActive: true,
