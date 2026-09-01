@@ -9,7 +9,8 @@ import {
   CreditCard,
   Headphones,
   CheckCircle2,
-  ExternalLink
+  ExternalLink,
+  Lock
 } from 'lucide-react';
 import type { Category, StoreSettings } from '../types';
 
@@ -162,10 +163,10 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('admin')}
-                  className="text-[#FAF9F6]/60 hover:text-white transition-colors"
+                  onClick={() => onNavigate('catalog')}
+                  className="hover:text-white transition-colors text-left"
                 >
-                  Espace Administration Vendeur
+                  Tous nos Accessoires
                 </button>
               </li>
             </ul>
@@ -234,7 +235,17 @@ export const Footer: React.FC<FooterProps> = ({
 
       {/* Copyright */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-[#3D3A35] text-center text-xs text-[#FAF9F6]/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p>© {new Date().getFullYear()} {storeName} - République de Djibouti. Tous droits réservés.</p>
+        <div className="flex items-center gap-2">
+          <p>© {new Date().getFullYear()} {storeName} - République de Djibouti. Tous droits réservés.</p>
+          <button
+            onClick={() => onNavigate('admin')}
+            className="text-[#FAF9F6]/20 hover:text-[#FAF9F6]/50 transition-colors p-1 rounded-sm cursor-pointer"
+            title="Espace gestion"
+            aria-label="Accès commerçant"
+          >
+            <Lock className="w-2.5 h-2.5" />
+          </button>
+        </div>
         <p className="text-[#FAF9F6]/50">Devise officielle : Franc Djibouti (DJF / FDJ)</p>
       </div>
     </footer>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Mail, ArrowRight, AlertCircle, Eye, EyeOff, KeyRound } from 'lucide-react';
+import { ShieldCheck, Lock, Mail, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface AdminLoginProps {
@@ -12,8 +12,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
   onNavigateHome
 }) => {
   const { login } = useAuth();
-  const [email, setEmail] = useState('admin@djiaccess.dj');
-  const [password, setPassword] = useState('djibouti2026');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,16 +26,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
       await login(email.trim(), password.trim());
       onLoginSuccess();
     } catch (err: any) {
-      setError(err.message || 'Identifiants invalides. Veuillez réessayer.');
+      setError(err.message || 'Identifiants invalides. Veuillez vérifier vos accès.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const fillCredentials = () => {
-    setEmail('admin@djiaccess.dj');
-    setPassword('djibouti2026');
-    setError(null);
   };
 
   return (
@@ -51,35 +45,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
             Espace Commerçant
           </h1>
           <p className="text-xs text-[#7A766F]">
-            Connectez-vous pour administrer la boutique DjiAccess
+            Accès sécurisé réservé à l'administrateur
           </p>
-        </div>
-
-        {/* Demo Credentials Note */}
-        <div className="p-3.5 rounded-2xl bg-[#F4F2EB] border border-[#EAE7E0] text-xs text-[#3D3A35] space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-[#2D2926] flex items-center gap-1.5">
-              <KeyRound className="w-3.5 h-3.5 text-[#5A5A40]" />
-              Identifiants d'accès commerçant :
-            </span>
-            <button
-              type="button"
-              onClick={fillCredentials}
-              className="text-[11px] font-semibold text-[#5A5A40] hover:underline cursor-pointer"
-            >
-              Remplir
-            </button>
-          </div>
-          <div className="bg-white/80 p-2.5 rounded-xl border border-[#EAE7E0] space-y-1 font-mono text-[11px]">
-            <p className="flex justify-between">
-              <span className="text-[#7A766F]">Email :</span>
-              <strong className="text-[#2D2926]">admin@djiaccess.dj</strong>
-            </p>
-            <p className="flex justify-between">
-              <span className="text-[#7A766F]">Mot de passe :</span>
-              <strong className="text-[#2D2926]">djibouti2026</strong>
-            </p>
-          </div>
         </div>
 
         {error && (
@@ -97,6 +64,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
                 id="admin-login-email"
                 type="text"
                 required
+                placeholder="Votre identifiant"
+                autoComplete="username"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -115,6 +84,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
                 id="admin-login-password"
                 type={showPassword ? 'text' : 'password'}
                 required
+                placeholder="••••••••••••"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -126,8 +97,9 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A766F] hover:text-[#2D2926] p-0.5"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A766F] hover:text-[#2D2926] p-0.5 cursor-pointer"
                 tabIndex={-1}
+                aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -155,7 +127,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
           <button
             type="button"
             onClick={onNavigateHome}
-            className="text-xs font-semibold text-[#7A766F] hover:text-[#2D2926] transition-colors"
+            className="text-xs font-semibold text-[#7A766F] hover:text-[#2D2926] transition-colors cursor-pointer"
           >
             ← Retourner au site public
           </button>

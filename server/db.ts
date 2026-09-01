@@ -566,6 +566,8 @@ const defaultSettings: StoreSettings = {
   accentColor: '#C5A880',
   backgroundColor: '#FAF9F6',
   colorPreset: 'olive',
+  enableAutoDarkMode: true,
+  darkModePreference: 'auto',
   aboutText: 'DjiAccess est la boutique djiboutienne de référence pour vos accessoires smartphones, écouteurs, montres connectées, chargeurs et articles de mode. Boutique 100% en ligne : commandez directement sur le site et recevez votre livraison express partout à Djibouti avec paiement sécurisé à la réception ou via D-Money / Waafi.',
   announcementBar: '🚚 Livraison express en moins de 3h à Djibouti-Ville & Balbala ! Paiement à la livraison accepté.',
   isAnnouncementActive: true,

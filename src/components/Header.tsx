@@ -190,28 +190,26 @@ export const Header: React.FC<HeaderProps> = ({
                 WhatsApp Direct
               </a>
 
-              {/* Admin Portal Button */}
-              <button
-                id="btn-header-admin"
-                type="button"
-                onClick={() => onNavigate('admin')}
-                className={`p-2 rounded-xl text-[#7A766F] hover:text-[#2D2926] hover:bg-[#F2F1ED] transition-colors flex items-center gap-1 text-xs font-semibold ${
-                  isAuthenticated ? 'bg-[#F2F1ED] text-[#5A5A40] border border-[#5A5A40]/30' : ''
-                }`}
-                title="Espace Commerçant / Administration"
-              >
-                <ShieldCheck className="w-5 h-5 text-[#5A5A40]" />
-                <span className="hidden xl:inline">
-                  {isAuthenticated ? 'Admin Connecté' : 'Espace Vendeur'}
-                </span>
-              </button>
+              {/* Discreet Admin indicator if already authenticated */}
+              {isAuthenticated && (
+                <button
+                  id="btn-header-admin"
+                  type="button"
+                  onClick={() => onNavigate('admin')}
+                  className="p-2 rounded-xl text-[#5A5A40] bg-[#F2F1ED] border border-[#5A5A40]/30 hover:bg-[#EAE7E0] transition-colors flex items-center gap-1 text-xs font-semibold cursor-pointer"
+                  title="Tableau de Bord Admin"
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#5A5A40]" />
+                  <span className="hidden xl:inline">Admin</span>
+                </button>
+              )}
 
               {/* Shopping Cart Button */}
               <button
                 id="btn-header-cart"
                 type="button"
                 onClick={openCartDrawer}
-                className="relative p-2.5 rounded-xl bg-[#5A5A40] text-white hover:bg-[#4A4A30] transition-all duration-200 flex items-center justify-center shadow-xs active:scale-95"
+                className="relative p-2.5 rounded-xl bg-[#5A5A40] text-white hover:bg-[#4A4A30] transition-all duration-200 flex items-center justify-center shadow-xs active:scale-95 cursor-pointer"
                 aria-label={`Panier (${itemCount} articles)`}
               >
                 <ShoppingBag className="w-5 h-5" />
@@ -306,18 +304,22 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Admin and contact */}
+            {/* Footer info in mobile drawer */}
             <div className="pt-3 border-t border-[#EAE7E0] flex items-center justify-between">
-              <button
-                onClick={() => {
-                  onNavigate('admin');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="text-xs font-semibold text-[#5A5A40] flex items-center gap-1.5 p-2 bg-white border border-[#EAE7E0] rounded-lg"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Administration
-              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={() => {
+                    onNavigate('admin');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-xs font-semibold text-[#5A5A40] flex items-center gap-1.5 p-2 bg-white border border-[#EAE7E0] rounded-lg cursor-pointer"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  Tableau Admin
+                </button>
+              ) : (
+                <span className="text-[11px] text-[#7A766F]">Livraison Express Djibouti 🇩🇯</span>
+              )}
               <a
                 href={`tel:${storePhone}`}
                 className="text-xs font-semibold text-[#7A766F] flex items-center gap-1"

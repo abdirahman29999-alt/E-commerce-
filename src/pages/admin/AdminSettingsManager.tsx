@@ -23,7 +23,10 @@ import {
   RefreshCw,
   AlertCircle,
   FileCode,
-  CheckCircle
+  CheckCircle,
+  Moon,
+  Sun,
+  Laptop
 } from 'lucide-react';
 import type { StoreSettings } from '../../types';
 import { api, formatFDJ } from '../../services/api';
@@ -65,6 +68,8 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
   const [accentColor, setAccentColor] = useState('#C5A880');
   const [backgroundColor, setBackgroundColor] = useState('#FAF9F6');
   const [colorPreset, setColorPreset] = useState('olive');
+  const [enableAutoDarkMode, setEnableAutoDarkMode] = useState(true);
+  const [darkModePreference, setDarkModePreference] = useState<'auto' | 'light' | 'dark'>('auto');
 
   // 4. Bandeau Annonce
   const [announcementBar, setAnnouncementBar] = useState('');
@@ -116,6 +121,8 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
       setAccentColor(settings.accentColor || '#C5A880');
       setBackgroundColor(settings.backgroundColor || '#FAF9F6');
       setColorPreset(settings.colorPreset || 'olive');
+      setEnableAutoDarkMode(settings.enableAutoDarkMode ?? (settings.darkModePreference !== 'light'));
+      setDarkModePreference(settings.darkModePreference || (settings.enableAutoDarkMode === false ? 'light' : 'auto'));
 
       setAnnouncementBar(settings.announcementBar || '🚚 Livraison express en moins de 3h à Djibouti-Ville & Balbala ! Paiement à la livraison.');
       setAnnouncementTag(settings.announcementTag || 'DJIBOUTI 🇩🇯');
@@ -256,6 +263,8 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
         accentColor: accentColor.trim(),
         backgroundColor: backgroundColor.trim(),
         colorPreset,
+        enableAutoDarkMode,
+        darkModePreference,
 
         announcementBar: announcementBar.trim(),
         announcementTag: announcementTag.trim(),
@@ -848,6 +857,136 @@ export const AdminSettingsManager: React.FC<AdminSettingsManagerProps> = ({
                   <p className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
                     <Check className="w-3 h-3" />
                     <span>Aperçu instantané appliqué</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Dark Mode & System Preferences */}
+            <div className="pt-5 border-t border-[#EAE7E0] space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 className="text-xs font-bold text-[#2D2926] uppercase tracking-wider text-[#7A766F] flex items-center gap-1.5">
+                    <Moon className="w-3.5 h-3.5 text-[#5A5A40]" />
+                    Mode Sombre & Préférences Système
+                  </h3>
+                  <p className="text-xs text-[#7A766F] mt-0.5">
+                    Adapte le design au confort visuel de vos visiteurs tout en conservant vos couleurs de marque personnalisées.
+                  </p>
+                </div>
+                <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full shrink-0 self-start sm:self-center flex items-center gap-1 ${
+                  enableAutoDarkMode && darkModePreference === 'auto'
+                    ? 'bg-emerald-100 text-emerald-800'
+                    : darkModePreference === 'dark'
+                    ? 'bg-indigo-100 text-indigo-800'
+                    : 'bg-stone-200 text-stone-700'
+                }`}>
+                  {enableAutoDarkMode && darkModePreference === 'auto' ? '🌓 Auto Système Actif' : darkModePreference === 'dark' ? '🌙 Forcé Sombre' : '☀️ Forcé Clair'}
+                </span>
+              </div>
+
+              {/* 3 Choice Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* 1. Auto System */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnableAutoDarkMode(true);
+                    setDarkModePreference('auto');
+                  }}
+                  className={`p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
+                    enableAutoDarkMode && darkModePreference === 'auto'
+                      ? 'border-[#5A5A40] ring-2 ring-[#5A5A40]/20 bg-[#FAF9F6] shadow-xs'
+                      : 'border-[#EAE7E0] hover:border-stone-400 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-bold">
+                      <Laptop className="w-4 h-4" />
+                    </div>
+                    {enableAutoDarkMode && darkModePreference === 'auto' && (
+                      <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs font-bold text-[#2D2926]">Automatique (Système)</p>
+                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-sm">Conseillé</span>
+                    </div>
+                    <p className="text-[11px] text-[#7A766F] mt-1">
+                      Détecte automatiquement si le smartphone / PC du client est en mode sombre.
+                    </p>
+                  </div>
+                </button>
+
+                {/* 2. Toujours Clair */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnableAutoDarkMode(false);
+                    setDarkModePreference('light');
+                  }}
+                  className={`p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
+                    !enableAutoDarkMode || darkModePreference === 'light'
+                      ? 'border-[#5A5A40] ring-2 ring-[#5A5A40]/20 bg-[#FAF9F6] shadow-xs'
+                      : 'border-[#EAE7E0] hover:border-stone-400 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+                      <Sun className="w-4 h-4" />
+                    </div>
+                    {(!enableAutoDarkMode || darkModePreference === 'light') && (
+                      <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#2D2926]">Toujours Clair (Standard)</p>
+                    <p className="text-[11px] text-[#7A766F] mt-1">
+                      Maintient toujours l'arrière-plan clair et les tons lin / blanc originaux.
+                    </p>
+                  </div>
+                </button>
+
+                {/* 3. Toujours Sombre */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnableAutoDarkMode(false);
+                    setDarkModePreference('dark');
+                  }}
+                  className={`p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
+                    darkModePreference === 'dark'
+                      ? 'border-[#5A5A40] ring-2 ring-[#5A5A40]/20 bg-[#FAF9F6] shadow-xs'
+                      : 'border-[#EAE7E0] hover:border-stone-400 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-xl bg-slate-900 text-slate-100 flex items-center justify-center font-bold">
+                      <Moon className="w-4 h-4" />
+                    </div>
+                    {darkModePreference === 'dark' && (
+                      <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#2D2926]">Toujours Sombre (Nuit)</p>
+                    <p className="text-[11px] text-[#7A766F] mt-1">
+                      Arrière-plan sombre élégant permanent, idéal pour les boutiques high-tech.
+                    </p>
+                  </div>
+                </button>
+              </div>
+
+              {/* Preservation Notice Box */}
+              <div className="p-3.5 rounded-2xl bg-[#F4F2EB] border border-[#EAE7E0] flex items-start gap-2.5 text-xs text-[#3D3A35]">
+                <Sparkles className="w-4 h-4 text-[#5A5A40] shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <p className="font-semibold text-[#2D2926]">
+                    Vos couleurs personnalisées restent 100% actives et visibles :
+                  </p>
+                  <p className="text-[11px] text-[#7A766F]">
+                    Vos boutons d'action ({primaryColor}), logos, étoiles et accents dorés ({accentColor}) sont parfaitement conservés avec un contraste optimisé pour une lisibilité parfaite.
                   </p>
                 </div>
               </div>

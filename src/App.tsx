@@ -108,6 +108,18 @@ function MainApp() {
 
   useEffect(() => {
     loadPublicData();
+
+    // Check if URL specifies #admin or /admin
+    const checkHash = () => {
+      const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
+      if (hash === '#admin' || path === '/admin') {
+        setCurrentView('admin');
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
   }, [loadPublicData]);
 
   useEffect(() => {
@@ -168,62 +180,65 @@ function MainApp() {
     }
 
     return (
-      <AdminLayout
-        currentTab={adminTab}
-        onTabChange={(tab) => setAdminTab(tab)}
-        onNavigateHome={() => navigate('home')}
-      >
-        {adminTab === 'overview' && (
-          <AdminDashboardOverview
-            stats={adminStats}
-            recentOrders={adminOrders}
-            onNavigateTab={(tab) => setAdminTab(tab)}
-            onStatusChange={handleOrderStatusChange}
-          />
-        )}
-        {adminTab === 'products' && (
-          <AdminProductsManager
-            products={products}
-            categories={categories}
-            onRefresh={loadAdminData}
-          />
-        )}
-        {adminTab === 'orders' && (
-          <AdminOrdersManager
-            orders={adminOrders}
-            onRefresh={loadAdminData}
-          />
-        )}
-        {adminTab === 'categories' && (
-          <AdminCategoriesManager
-            categories={categories}
-            onRefresh={loadAdminData}
-          />
-        )}
-        {adminTab === 'customers' && (
-          <AdminCustomersManager
-            customers={adminCustomers}
-          />
-        )}
-        {adminTab === 'promotions' && (
-          <AdminPromotionsManager
-            promotions={adminPromotions}
-            onRefresh={loadAdminData}
-          />
-        )}
-        {adminTab === 'delivery' && (
-          <AdminDeliveryManager
-            zones={deliveryZones}
-            onRefresh={loadAdminData}
-          />
-        )}
-        {adminTab === 'settings' && (
-          <AdminSettingsManager
-            settings={settings}
-            onRefresh={loadAdminData}
-          />
-        )}
-      </AdminLayout>
+      <>
+        <ThemeStyle settings={settings} />
+        <AdminLayout
+          currentTab={adminTab}
+          onTabChange={(tab) => setAdminTab(tab)}
+          onNavigateHome={() => navigate('home')}
+        >
+          {adminTab === 'overview' && (
+            <AdminDashboardOverview
+              stats={adminStats}
+              recentOrders={adminOrders}
+              onNavigateTab={(tab) => setAdminTab(tab)}
+              onStatusChange={handleOrderStatusChange}
+            />
+          )}
+          {adminTab === 'products' && (
+            <AdminProductsManager
+              products={products}
+              categories={categories}
+              onRefresh={loadAdminData}
+            />
+          )}
+          {adminTab === 'orders' && (
+            <AdminOrdersManager
+              orders={adminOrders}
+              onRefresh={loadAdminData}
+            />
+          )}
+          {adminTab === 'categories' && (
+            <AdminCategoriesManager
+              categories={categories}
+              onRefresh={loadAdminData}
+            />
+          )}
+          {adminTab === 'customers' && (
+            <AdminCustomersManager
+              customers={adminCustomers}
+            />
+          )}
+          {adminTab === 'promotions' && (
+            <AdminPromotionsManager
+              promotions={adminPromotions}
+              onRefresh={loadAdminData}
+            />
+          )}
+          {adminTab === 'delivery' && (
+            <AdminDeliveryManager
+              zones={deliveryZones}
+              onRefresh={loadAdminData}
+            />
+          )}
+          {adminTab === 'settings' && (
+            <AdminSettingsManager
+              settings={settings}
+              onRefresh={loadAdminData}
+            />
+          )}
+        </AdminLayout>
+      </>
     );
   }
 
@@ -375,7 +390,7 @@ function MainApp() {
 
         <button
           onClick={openCartDrawer}
-          className="relative flex flex-col items-center gap-1 text-[10px] font-medium text-[#7A766F] hover:text-[#5A5A40]"
+          className="relative flex flex-col items-center gap-1 text-[10px] font-medium text-[#7A766F] hover:text-[#5A5A40] cursor-pointer"
         >
           <div className="relative">
             <ShoppingBag className="w-5 h-5" />
@@ -388,15 +403,17 @@ function MainApp() {
           <span>Panier</span>
         </button>
 
-        <button
-          onClick={() => navigate('admin')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${
-            currentView === 'admin' ? 'text-[#5A5A40] font-bold' : 'text-[#7A766F] hover:text-[#5A5A40]'
-          }`}
-        >
-          <ShieldCheck className="w-5 h-5" />
-          <span>Admin</span>
-        </button>
+        {isAuthenticated && (
+          <button
+            onClick={() => navigate('admin')}
+            className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors cursor-pointer ${
+              currentView === 'admin' ? 'text-[#5A5A40] font-bold' : 'text-[#7A766F] hover:text-[#5A5A40]'
+            }`}
+          >
+            <ShieldCheck className="w-5 h-5" />
+            <span>Admin</span>
+          </button>
+        )}
       </div>
 
     </div>

@@ -102,6 +102,82 @@ export const ThemeStyle: React.FC<ThemeStyleProps> = ({ settings }) => {
   const secondary = settings?.secondaryColor || '#2D2926';
   const accent = settings?.accentColor || '#C5A880';
   const bg = settings?.backgroundColor || '#FAF9F6';
+  
+  const darkModePreference = settings?.darkModePreference || (settings?.enableAutoDarkMode !== false ? 'auto' : 'light');
+  const isAutoDark = darkModePreference === 'auto';
+  const isForceDark = darkModePreference === 'dark';
+
+  const darkRules = `
+    body {
+      background-color: #121211 !important;
+      color: #E6E4DF !important;
+    }
+
+    /* Container & Card Backgrounds */
+    .bg-white {
+      background-color: #1A1A18 !important;
+    }
+    .bg-\\[\\#FAF9F6\\] {
+      background-color: #121211 !important;
+    }
+    .bg-\\[\\#F4F2EB\\], .bg-\\[\\#F2F1ED\\], .bg-stone-50, .bg-stone-100 {
+      background-color: #20201D !important;
+    }
+
+    /* Borders & Dividers */
+    .border-\\[\\#EAE7E0\\], .border-stone-200, .border-gray-200, .border-stone-100 {
+      border-color: #2D2D29 !important;
+    }
+
+    /* Typography & Text */
+    .text-\\[\\#2D2926\\], .text-stone-900, .text-gray-900 {
+      color: #F4F2EB !important;
+    }
+    .text-\\[\\#3D3A35\\], .text-stone-700, .text-gray-700 {
+      color: #D8D5CD !important;
+    }
+    .text-\\[\\#7A766F\\], .text-stone-500, .text-gray-500 {
+      color: #A39E93 !important;
+    }
+
+    /* Interactive Inputs & Selects */
+    input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), 
+    textarea, 
+    select {
+      background-color: #181816 !important;
+      color: #F4F2EB !important;
+      border-color: #2E2E2A !important;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #6E6B65 !important;
+    }
+
+    /* Subtle Hovers in Dark Mode */
+    .hover\\:bg-\\[\\#F2F1ED\\]:hover, 
+    .hover\\:bg-\\[\\#FAF9F6\\]:hover,
+    .hover\\:bg-stone-50:hover,
+    .hover\\:bg-stone-100:hover {
+      background-color: #262622 !important;
+    }
+
+    /* Maintain High-Contrast Custom Brand Colors in Dark Mode */
+    .bg-\\[\\#5A5A40\\] {
+      background-color: ${primary} !important;
+      color: #FFFFFF !important;
+    }
+    .text-\\[\\#5A5A40\\] {
+      color: ${primary} !important;
+    }
+    .border-\\[\\#5A5A40\\] {
+      border-color: ${primary} !important;
+    }
+    .fill-\\[\\#5A5A40\\] {
+      fill: ${primary} !important;
+    }
+    .ring-\\[\\#5A5A40\\] {
+      --tw-ring-color: ${primary} !important;
+    }
+  `;
 
   return (
     <style id="djiaccess-dynamic-theme">{`
@@ -149,6 +225,14 @@ export const ThemeStyle: React.FC<ThemeStyleProps> = ({ settings }) => {
       .bg-\\[\\#FAF9F6\\] {
         background-color: ${bg} !important;
       }
+
+      ${isForceDark ? darkRules : ''}
+
+      ${isAutoDark ? `
+        @media (prefers-color-scheme: dark) {
+          ${darkRules}
+        }
+      ` : ''}
     `}</style>
   );
 };
